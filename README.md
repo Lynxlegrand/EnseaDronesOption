@@ -20,7 +20,7 @@ Our team consists of **13 people**, with task distribution as follows:
 | **Joao Pedro Penelu** | Firmware Lead | Developing the C code for the drone |
 | **Name 3** | Sensor Management | Integration and calibration of sensors |
 | **Hugo Carvalho Fontes & Thomas Terlinden** | Communication | Implementation of communication protocols |
-| **Name 5** | Flight Control | Stabilization algorithms |
+| **Phil Rigling & Maël Archenault** | Flight Control | Stabilization algorithms |
 | **Name 6** | Power Management | Energy and battery management |
 | **Name 7** | Documentation Lead | Writing reports and documentation |
 | ... | ... | ... |
