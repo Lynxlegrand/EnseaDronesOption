@@ -12,7 +12,7 @@ This project involves developing a drone in **C**, equipped with an **STM32** bo
 - **Communication:** NRF24L01*
 
 ## 👥 Team Organization
-Our team consists of **13 people**, with task distribution as follows:
+Our team consists of **15 people**, with task distribution as follows:
 
 | 👤 Name | 🎯 Role | 📝 Main Tasks |
 |---------|--------|--------------|
