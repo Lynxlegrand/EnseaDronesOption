@@ -21,7 +21,7 @@ Our team consists of **13 people**, with task distribution as follows:
 | **Nicholas & Parker** | Sensor Management | Integration and calibration of sensors |
 | **Hugo Carvalho Fontes & Thomas Terlinden** | Communication | Implementation of communication protocols |
 | **Phil Rigling & Maël Archenault** | Flight Control | Stabilization algorithms |
-| **Kevin Dugard** | Developing the C code for ESC and motors | 
+| **Kevin Dugard** | Motors coding | Developing the C code for ESC and motors | 
 | **Name 6** | Power Management | Energy and battery management |
 | **Name 7** | Documentation Lead | Writing reports and documentation |
 | ... | ... | ... |
