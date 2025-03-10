@@ -18,7 +18,7 @@ Our team consists of **13 people**, with task distribution as follows:
 |---------|--------|--------------|
 | **Hugo Cordi** | Project Manager | Supervision and mechanics |
 | **Joao Pedro Penelu** | Firmware Lead | Developing the C code for the drone |
-| **Name 3** | Sensor Management | Integration and calibration of sensors |
+| **Nicholas Parker** | Sensor Management | Integration and calibration of sensors |
 | **Hugo Carvalho Fontes & Thomas Terlinden** | Communication | Implementation of communication protocols |
 | **Phil Rigling & Maël Archenault** | Flight Control | Stabilization algorithms |
 | **Name 6** | Power Management | Energy and battery management |
