@@ -9,7 +9,7 @@ This project involves developing a drone in **C**, equipped with an **STM32** bo
 - **Language:** C
 - **Microcontroller:** STM32
 - **Sensors:** *Ultrasound sensor, IMU*
-- **Communication:** NRF24L01*
+- **Communication:** *NRF24L01*
 
 ## 💻 Functional architecture
 ![image](https://github.com/user-attachments/assets/ee61e3ac-6aca-4111-852c-419d428e5959)
@@ -34,17 +34,7 @@ Our team consists of **15 people**, with task distribution as follows:
 ## 🚀 Installation and Usage
 ### 1️⃣ Clone the repository:
 ```bash
-git clone https://github.com/project_name.git
-```
-
-### 2️⃣ Compile the project:
-```bash
-make
-```
-
-### 3️⃣ Flash the firmware onto the STM32:
-```bash
-make flash
+git clone https://github.com/Lynxlegrand/EnseaDronesOption
 ```
 
 ## 🤝 Contribution Guidelines
@@ -53,12 +43,7 @@ make flash
 - Add **comments** and document **all changes**.
 
 ## 📊 Progress Tracking
-- **Kanban** or **task management** via **GitHub Projects**.
-- **Regular meetings** to track progress.
+- **Regular meetings** to track progress : 10 minutes at the beginning of each session. 
 
 ## 📩 Contact
-For any questions, contact **[Project Manager's Name]** or **open an issue** on the repository.
-
----
-
-🔧 *Ensure all names and details are updated accordingly. Let me know if you need further adjustments!*
+For any questions, contact **Hugo Cordi** or **open an issue** on the repository.
