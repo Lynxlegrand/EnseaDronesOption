@@ -41,6 +41,7 @@ git clone https://github.com/Lynxlegrand/EnseaDronesOption
 - Each member must **put his files in the right folder** or **create it if it does not exist**.
 - Follow the **coding convention** *(e.g., MISRA C standard if applicable).*
 - Add **comments** and document **all changes**.
+- **ONLY PUSH CODE THAT ACTUALLY WORKS**
 
 ## 📊 Progress Tracking
 - **Regular meetings** to track progress : 10 minutes at the beginning of each session. 
