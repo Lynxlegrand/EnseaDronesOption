@@ -11,6 +11,9 @@ This project involves developing a drone in **C**, equipped with an **STM32** bo
 - **Sensors:** *Ultrasound sensor, IMU*
 - **Communication:** NRF24L01*
 
+## 💻 Functional architecture
+![image](https://github.com/user-attachments/assets/ee61e3ac-6aca-4111-852c-419d428e5959)
+
 ## 👥 Team Organization
 Our team consists of **15 people**, with task distribution as follows:
 
