@@ -19,7 +19,7 @@ Our team consists of **15 people**, with task distribution as follows:
 
 | 👤 Name | 🎯 Role | 📝 Main Tasks |
 |---------|--------|--------------|
-| **Hugo Cordi** | Project Manager | Supervision and mechanics |
+| **Hugo Cordi** | Project Manager | Supervision and Men Machine Interface |
 | **Joao Pedro Penelu** | Firmware Lead | Developing the C code for the drone |
 | **Nicholas & Parker** | Sensor Management | Integration and calibration of sensors |
 | **Hugo Carvalho Fontes & Thomas Terlinden** | Communication | Implementation of communication protocols |
@@ -38,7 +38,7 @@ git clone https://github.com/Lynxlegrand/EnseaDronesOption
 ```
 
 ## 🤝 Contribution Guidelines
-- Each member must **work on their branch** and submit **pull requests**.
+- Each member must **put his files in the right folder** or **create it if it does not exist**.
 - Follow the **coding convention** *(e.g., MISRA C standard if applicable).*
 - Add **comments** and document **all changes**.
 
