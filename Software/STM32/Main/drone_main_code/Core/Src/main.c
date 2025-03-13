@@ -18,7 +18,9 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include "ESC.h"
+#include "stm32f4xx_hal_conf.h"
+#include <string.h>
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "mainloop.h"
@@ -41,7 +43,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart2;
-
+h_motor_t motor1;
+int motor_speed = 50; // Initial motor speed
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -63,10 +66,33 @@ static void MX_USART2_UART_Init(void);
   * @brief  The application entry point.
   * @retval int
   */
+void System_Init() {
+    // Motors Initialization
+    motor1.htim = &htim1;
+    motor1.channel = TIM_CHANNEL_1;
+    motor_Init(&motor1);
+    // ADD NRF MODULE INTIALIZATION
+}
+
+void Update_Motor_Speed() {
+	motor_SetPower(&motor1, motor_speed);
+	printf("New motor speed : %d%%\r\n", motor_speed);
+}
+
 int main(void)
 {
-
   /* USER CODE BEGIN 1 */
+	HAL_Init();
+	SystemClock_Config();
+	MX_TIM1_Init();
+
+	System_Init();
+
+	while (1) {
+	    Listen_For_Commands();
+	    HAL_Delay(100);
+	}
+
 
   /* USER CODE END 1 */
 
@@ -255,3 +281,5 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
+
+
