@@ -1,1 +1,5 @@
-../Core/Src/ESC.c:3:6:set_ESC	1
+../Core/Src/ESC.c:9:6:motor_ArmESC	1
+../Core/Src/ESC.c:17:5:percentageToMicrosecondsAtHighState	1
+../Core/Src/ESC.c:22:6:motor_SetPower	4
+../Core/Src/ESC.c:28:6:motor_Init	1
+../Core/Src/ESC.c:36:6:motor_TurnOff	1

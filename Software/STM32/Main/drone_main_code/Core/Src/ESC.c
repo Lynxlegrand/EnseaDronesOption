@@ -1,6 +1,6 @@
 #include "ESC.h"
-#include "stm32f4xx_hal_conf.h"
-#include "stdio.h"
+#include "stm32f4xx.h"
+
 
 #define COUNTER_PERIOD 19999 // Maximal counter value
 #define MIN_POWER_DUTY_CYCLE 6 //%
@@ -27,6 +27,8 @@ void motor_SetPower(h_motor_t* h_motor, int percentage) {
 
 void motor_Init(h_motor_t* h_motor) {
     HAL_TIM_PWM_Start(h_motor->htim, h_motor->channel);
+
+    // Initialisation spécifique à l'ESC
     motor_ArmESC(h_motor);
 }
 
