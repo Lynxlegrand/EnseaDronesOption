@@ -43,6 +43,13 @@ void init(){
 
 
 	sample_time_us = 825;
+
+	heightPID.sample_time = sample_time_us/1000000;
+	pitchPID.sample_time = sample_time_us/1000000;
+	rollPID.sample_time = sample_time_us/1000000;
+	yawPID.sample_time = sample_time_us/1000000;
+
+
 	time_to_reach_1m = 5; // seconds
 	time_to_make_full_rotation = 5; // seconds
 
@@ -51,8 +58,8 @@ void init(){
 
 	// Timer clock is 84 MHz
 
-	TIM3->PSC = 84-1;
-	TIM3->CNT = sample_time_us;
+	htim3.Instance->PSC = 84-1;
+	htim3.Instance->CNT = sample_time_us;
 
 
 	MOTOR_FRONT_RIGHT.htim = &htim1;
@@ -82,6 +89,22 @@ void init(){
 void control_step(){
 			//--------- Reading Sensors ------------//
 			read_IMU();
+
+			float pitch_speed;
+			float yaw_speed;
+			float roll_speed;
+
+			pitch.measurement = pitch.previous_measurement + pitch_speed*sample_time_us/1000000;
+			pitch.previous_measurement = pitch.measurement;
+
+			roll.measurement = roll.previous_measurement + roll_speed*sample_time_us/1000000;
+			roll.previous_measurement = roll.measurement;
+
+			yaw.measurement = yaw.previous_measurement + yaw_speed*sample_time_us/1000000;
+			yaw.previous_measurement = yaw.measurement;
+
+
+			
 			read_ultrasound();
 
 			//--------- Reading Commands ------------//

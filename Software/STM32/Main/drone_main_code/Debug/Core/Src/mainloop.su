@@ -1,2 +1,2 @@
-../Core/Src/mainloop.c:33:6:init	8	static
-../Core/Src/mainloop.c:64:6:control_step	40	static
+../Core/Src/mainloop.c:42:6:init	8	static
+../Core/Src/mainloop.c:82:6:control_step	40	static
