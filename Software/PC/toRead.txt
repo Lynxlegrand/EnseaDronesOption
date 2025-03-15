@@ -1,2 +1,0 @@
-In this folder, put everything related to PC code
-Delete this file after filling the folder
