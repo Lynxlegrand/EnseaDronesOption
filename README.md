@@ -6,7 +6,7 @@ This project involves developing a drone in **C**, equipped with an **STM32** bo
 ⏳ **Project Duration:** 24 hours
 
 ## 🛠️ Technologies Used
-- **Language:** C
+- **Language:** C, Python
 - **Microcontroller:** STM32
 - **Sensors:** *Ultrasound sensor, IMU*
 - **Communication:** *NRF24L01*
