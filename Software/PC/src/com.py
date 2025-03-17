@@ -6,9 +6,11 @@ from const import *
 ser = None
 dico_key_pressed = {}
 
-def initialize_connection(port):
+def initialize_connection():
     try:
         # Open the serial port
+
+        port = get_available_ports()[0].split('(')[1][:-1]       #get the port in a chain of character
         global ser
         if ser != None:
             print("Connection already established")
@@ -38,6 +40,7 @@ def close_connection():
         except serial.SerialException as e:
             return (-1, str(e))
     return (-1, "No connection is established")
+    print("Connection closed")
 
 
 def send_command(command):
@@ -63,6 +66,7 @@ def receive_data():
         return None
     if ser.in_waiting >= BUFF_SIZE:  # Check if data is available to read
         data = ser.read(BUFF_SIZE)  # Read a full line of data
+        print(data)
         return data.decode('utf-8').strip("\x00")
     return None
 
@@ -76,7 +80,6 @@ def generate_trame() :
             trame +="0"
         trame += "/"
     return(trame)
-
 
 
 

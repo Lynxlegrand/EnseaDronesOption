@@ -87,7 +87,7 @@ class DroneControlPanel(ctk.CTk):
 
 
         # Start updating buttons
-        self.update_buttons()
+        self.update()
         
 
     def load_and_display_image(self, image_path, lenght, height):
@@ -102,28 +102,32 @@ class DroneControlPanel(ctk.CTk):
         return(self.image_label)
     
     #UPDATE
-    def update_buttons(self):
+    def update(self):
+        data = receive_data()
+        if data != None:
+            print(data)
+
         key_has_changed = False
         """Updates button colors based on pressed keys."""
         for key, btn in self.buttons.items():
             btn.configure(fg_color="green" if keyboard.is_pressed(key) else "gray")
             if (dico_key_pressed[key] != keyboard.is_pressed(key)) :                  #We test is there is a change in the dictionnary of key states
                 dico_key_pressed[key] = keyboard.is_pressed(key)
-                key_has_changed = True                        
+                if not key_has_changed:
+                    key_has_changed = True                        
 
-        if (key_has_changed == True) :         #if there is a change, we send the trame before the next update, so there is no conflicts when two buttons are pushed at the same time
-            print(generate_trame())
+        if key_has_changed :         #if there is a change, we send the trame before the next update, so there is no conflicts when two buttons are pushed at the same time
             send_command(generate_trame())             
             
-        # Schedule this function every 50ms
-        self.after(50, self.update_buttons)
+        # Schedule this function every UPDATE_PERIOD
+        self.after(UPDATE_PERIOD, self.update)
 
     def toggle_connection(self):
         """Active ou désactive la connexion et met à jour l'affichage"""
         self.is_connected = not self.is_connected
 
         if self.is_connected:
-            initialize_connection(COM_PORT)
+            initialize_connection()
             self.status_label.configure(text="Connection Established", fg_color="green")
         else:
             close_connection()
