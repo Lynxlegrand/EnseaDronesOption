@@ -1,55 +1,49 @@
 #include "motor.h"
-#include "nrf24l01.h"
 #include "stm32l4xx_hal.h"
-#include <string.h>
 
-// Déclaration des moteurs et variables
+// Déclaration du moteur et de la LED
 h_motor_t motor1;
-int motor_speed = 50; // Vitesse initiale des moteurs
+#define LED_GPIO_PORT GPIOB
+#define LED_PIN GPIO_PIN_0
 
-// Buffer de réception
-char rxData[32];
-
-// Initialisation des moteurs et NRF24L01
+// Initialisation du moteur et de la LED
 void System_Init() {
-    // Initialisation des moteurs
+    // Associer le Timer et le canal PWM au moteur
     motor1.htim = &htim1;
     motor1.channel = TIM_CHANNEL_1;
+
+    // Initialisation du moteur
     motor_Init(&motor1);
 
-    // Initialisation du module NRF24L01
-    NRF24_Init();
-    NRF24_RxMode(); // Mode réception
-    printf("NRF24L01 prêt en mode réception...\r\n");
+    // Démarrer le moteur à 50% de sa puissance
+    motor_SetPower(&motor1, 50);
+
+    // Configuration de la LED en sortie
+    __HAL_RCC_GPIOB_CLK_ENABLE();
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitStruct.Pin = LED_PIN;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(LED_GPIO_PORT, &GPIO_InitStruct);
 }
 
-// Ajustement de la vitesse du moteur
-void Update_Motor_Speed() {
-    motor_SetPower(&motor1, motor_speed);
-    printf("Nouvelle vitesse moteur: %d%%\r\n", motor_speed);
-}
-
-// Lecture et traitement des commandes reçues
-void Listen_For_Commands() {
-    if (NRF24_Receive(rxData)) {
-        if (strcmp(rxData, "UP") == 0 && motor_speed < 100) {
-            motor_speed += 10;
-        } else if (strcmp(rxData, "DOWN") == 0 && motor_speed > 0) {
-            motor_speed -= 10;
-        }
-        Update_Motor_Speed();
+// Callback appelé sur front montant du signal PWM
+void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim) {
+    if (htim->Instance == TIM1) {
+        HAL_GPIO_TogglePin(LED_GPIO_PORT, LED_PIN); // Changer l'état de la LED
     }
 }
 
 int main(void) {
     HAL_Init();
     SystemClock_Config();
-    MX_TIM1_Init();
+    MX_TIM1_Init(); // Initialisation du Timer 1
 
-    System_Init(); // Initialisation du moteur et du NRF24L01
+    System_Init(); // Initialisation du moteur et de la LED
 
     while (1) {
-        Listen_For_Commands();
-        HAL_Delay(100); // Attente pour éviter une surcharge CPU
+        // Le moteur tourne constamment à 50%
+        HAL_Delay(1000);
     }
 }
