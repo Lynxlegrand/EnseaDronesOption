@@ -36,11 +36,10 @@ def close_connection():
         try:
             ser.close()
             ser = None
-            return (0,"")
+            return (0,"Connection closed")
         except serial.SerialException as e:
             return (-1, str(e))
     return (-1, "No connection is established")
-    print("Connection closed")
 
 
 def send_command(command):
@@ -55,30 +54,39 @@ def send_command(command):
     encoded_string = (command + '\0').encode('utf-8')
     try:
         ser.write(encoded_string)
-        print("Sent "+ command)
+        #print("Sent "+ command)
         time.sleep(0.05) # Necessary time for the stm to gather all data before sending another command
         return (0,"")
     except serial.SerialException as e:
         return (-1, str(e))
    
 def receive_data():
+    global ser
     if ser == None:
         return None
-    if ser.in_waiting >= BUFF_SIZE:  # Check if data is available to read
-        data = ser.read(BUFF_SIZE)  # Read a full line of data
-        print(data)
-        return data.decode('utf-8').strip("\x00")
+
+    if ser.in_waiting >= BUFF_SIZE:  # Vérifier si assez de données sont disponibles
+        data = ser.read(BUFF_SIZE)  # Lire exactement BUFF_SIZE octets
+
+        try:
+            # Décoder et nettoyer les données reçues
+            return data.decode('utf-8').strip("\x00")
+        except UnicodeDecodeError:
+            print("Received non-UTF-8 data:", data)
+            return None  # Ou retourner `data.hex()` pour le débogage
+
     return None
 
+
 def generate_trame() : 
-    trame = "$/"
+    trame = "$"
     L_buttons = ["up", "down", "z", "s", "q", "d", "left", "right"]         #left and right correspond to tleft and tright
     for key in L_buttons : 
         if dico_key_pressed[key] == True : 
             trame += "1"
         else : 
             trame +="0"
-        trame += "/"
+        trame += ""
     return(trame)
 
 
