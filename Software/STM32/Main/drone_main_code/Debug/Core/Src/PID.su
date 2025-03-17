@@ -1,3 +1,0 @@
-../Core/Src/PID.c:3:7:integrate_error	24	static
-../Core/Src/PID.c:7:7:differentiate_error	24	static
-../Core/Src/PID.c:12:7:update	40	static
