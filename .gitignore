@@ -1,6 +1,6 @@
 #STM32 Cube IDE
 
-metadata/
+/.metadata/
 /.settings/
 
 # VS Code
