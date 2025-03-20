@@ -20,14 +20,14 @@ Our team consists of **15 people**, with task distribution as follows:
 | 👤 Name | 🎯 Role | 📝 Main Tasks |
 |---------|--------|--------------|
 | **Hugo Cordi** | Project Manager | Supervision and Men Machine Interface |
-| **Joao Pedro Penelu** | Firmware Lead | Developing the C code for the drone |
-| **Nicholas & Parker** | Sensor Management | Integration and calibration of sensors |
+| **Erwin** | Simulation & Assistant manager | Simulink simulation |
+| **Joao Pedro Penelu & Theo Farias** | IMU coding | Developing the C code to use the IMU |
+| **Nicholas & Parker** | Altimeter coding | Developing the C code to use the altimeter |
 | **Hugo Carvalho Fontes & Thomas Terlinden & Luca Francone** | Communication | Implementation of communication protocols |
 | **Phil Rigling & Maël Archenault** | Flight Control | Stabilization algorithms |
 | **Kevin Dugard** | Motors coding | Developing the C code for ESC and motors | 
-| **Name 6** | Power Management | Energy and battery management |
-| **Name 7** | Documentation Lead | Writing reports and documentation |
-| ... | ... | ... |
+| **Sabrina Santos Goncalves &  Alamo Conrado Monteiro Junior** | Mecanics | Modeling and 3D printing supports for the electronics |
+| **Jordano** | Mecanics | Assembling components & soldering |
 
 *(Complete the names and roles of each member)*
 
