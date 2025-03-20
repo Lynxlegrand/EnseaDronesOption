@@ -22,7 +22,7 @@ Our team consists of **15 people**, with task distribution as follows:
 | **Hugo Cordi** | Project Manager | Supervision and Men Machine Interface |
 | **Erwin** | Simulation & Assistant manager | Simulink simulation |
 | **Joao Pedro Penelu & Theo Farias** | IMU coding | Developing the C code to use the IMU |
-| **Nicholas & Parker** | Altimeter coding | Developing the C code to use the altimeter |
+| **Nicholas & Parker & Khalid Zouhair** | Altimeter coding | Developing the C code to use the altimeter |
 | **Hugo Carvalho Fontes & Thomas Terlinden & Luca Francone** | Communication | Implementation of communication protocols |
 | **Phil Rigling & Maël Archenault** | Flight Control | Stabilization algorithms |
 | **Kevin Dugard** | Motors coding | Developing the C code for ESC and motors | 
