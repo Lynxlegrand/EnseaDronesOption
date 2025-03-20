@@ -1,5 +1,5 @@
 ../Core/Src/ESC.c:9:6:motor_ArmESC	16	static
 ../Core/Src/ESC.c:17:5:percentageToMicrosecondsAtHighState	24	static
 ../Core/Src/ESC.c:22:6:motor_SetPower	24	static
-../Core/Src/ESC.c:28:6:motor_Init	16	static
-../Core/Src/ESC.c:36:6:motor_TurnOff	16	static
+../Core/Src/ESC.c:28:19:motor_Init	24	static
+../Core/Src/ESC.c:37:6:motor_TurnOff	16	static

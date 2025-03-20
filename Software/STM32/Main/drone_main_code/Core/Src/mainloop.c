@@ -9,6 +9,7 @@
 #include <math.h>
 
 #include <stdlib.h>
+#include <string.h>
 
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim3;
@@ -34,6 +35,9 @@ h_motor_t MOTOR_FRONT_LEFT;
 h_motor_t MOTOR_BACK_RIGHT;
 h_motor_t MOTOR_BACK_LEFT;
 
+int flight_allowed;
+
+
 
 char command[8];
 
@@ -41,7 +45,7 @@ char command[8];
 
 void init(){
 
-
+	flight_allowed = 1;
 	sample_time_us = 825;
 
 	heightPID.sample_time = sample_time_us/1000000;
@@ -64,29 +68,47 @@ void init(){
 
 	MOTOR_FRONT_RIGHT.htim = &htim1;
     MOTOR_FRONT_RIGHT.channel = TIM_CHANNEL_1;
-    motor_Init(&MOTOR_FRONT_RIGHT);
+    if (motor_Init(&MOTOR_FRONT_RIGHT)== HAL_ERROR){
+    	flight_allowed = 0;
+    }
+
 
 	MOTOR_FRONT_LEFT.htim = &htim1;
     MOTOR_FRONT_LEFT.channel = TIM_CHANNEL_2;
-    motor_Init(&MOTOR_FRONT_LEFT);
-
+    if (motor_Init(&MOTOR_FRONT_LEFT)== HAL_ERROR){
+        	flight_allowed = 0;
+        }
 	MOTOR_BACK_RIGHT.htim = &htim1;
 	MOTOR_BACK_RIGHT.channel = TIM_CHANNEL_3;
-	motor_Init(&MOTOR_BACK_RIGHT);
+	if (motor_Init(&MOTOR_BACK_RIGHT)== HAL_ERROR){
+	    	flight_allowed = 0;
+	    }
 
 	MOTOR_BACK_LEFT.htim = &htim1;
 	MOTOR_BACK_LEFT.channel = TIM_CHANNEL_4;
-	motor_Init(&MOTOR_BACK_LEFT);
+	if (motor_Init(&MOTOR_BACK_LEFT)== HAL_ERROR){
+	    	flight_allowed = 0;
+	    }
+
+
+
 
 
 	
 
-
+	if (flight_allowed == 1){
+		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 1);
+	}
+	else{
+		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 0);
+	}
 
 }
 
 
 void control_step(){
+
+		if (flight_allowed==1){
 			//--------- Reading Sensors ------------//
 			read_IMU();
 
@@ -112,6 +134,11 @@ void control_step(){
 			read_RF();
 
 			if (command[0]=='$'){// Verifying that the command was entirely received
+				motor_SetPower(&MOTOR_FRONT_RIGHT, 0);
+				motor_SetPower(&MOTOR_FRONT_LEFT, 0);
+				motor_SetPower(&MOTOR_BACK_RIGHT, 0);
+				motor_SetPower(&MOTOR_BACK_LEFT, 0);
+			}
 				// Height command extraction
 				if (command[1]=="1" && command[2]=="0"){
 					height.command+=height_step;
@@ -153,6 +180,9 @@ void control_step(){
 				else if (command[8]=="1" && command[7]=="0"){
 					yaw.command-= yaw_step;
 				}
+
+				if (strcmp(command, "$11111111")==0){
+					flight_allowed = 0;
 			}
 
 			//--------- Processing data ------------//
@@ -182,4 +212,14 @@ void control_step(){
 			motor_SetPower(&MOTOR_FRONT_LEFT, FL_percentage);
 			motor_SetPower(&MOTOR_BACK_RIGHT, BR_percentage);
 			motor_SetPower(&MOTOR_BACK_LEFT, BL_percentage);
+
+		}
+
+		else{
+			motor_SetPower(&MOTOR_FRONT_RIGHT, 0);
+			motor_SetPower(&MOTOR_FRONT_LEFT, 0);
+			motor_SetPower(&MOTOR_BACK_RIGHT, 0);
+			motor_SetPower(&MOTOR_BACK_LEFT, 0);
+		}
+
 }

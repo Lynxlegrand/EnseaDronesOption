@@ -25,11 +25,12 @@ void motor_SetPower(h_motor_t* h_motor, int percentage) {
     h_motor->PercentageOfTotalPower = percentage;
 }
 
-void motor_Init(h_motor_t* h_motor) {
-    HAL_TIM_PWM_Start(h_motor->htim, h_motor->channel);
-
+HAL_StatusTypeDef motor_Init(h_motor_t* h_motor) {
+    HAL_StatusTypeDef result = HAL_TIM_PWM_Start(h_motor->htim, h_motor->channel);
     // Initialisation spécifique à l'ESC
     motor_ArmESC(h_motor);
+
+    return result;
 }
 
 

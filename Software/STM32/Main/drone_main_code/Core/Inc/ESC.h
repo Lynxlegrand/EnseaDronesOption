@@ -10,7 +10,7 @@ typedef struct {
 } h_motor_t;
 
 int percentageToMicrosecondsAtHighState(int percentage);
-void motor_Init(h_motor_t* h_motor);
+HAL_StatusTypeDef motor_Init(h_motor_t* h_motor);
 void motor_SetPower(h_motor_t* h_motor, int percentage);
 void motor_TurnOff(h_motor_t* h_motor);
 
