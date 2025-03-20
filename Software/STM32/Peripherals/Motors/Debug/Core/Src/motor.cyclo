@@ -1,0 +1,6 @@
+../Core/Src/motor.c:9:6:motor_ArmESC	1
+../Core/Src/motor.c:17:5:percentageToMicrosecondsAtHighState	3
+../Core/Src/motor.c:25:6:motor_SetPower	8
+../Core/Src/motor.c:51:6:motor_Init	1
+../Core/Src/motor.c:57:6:motor_Security	1
+../Core/Src/motor.c:64:6:motor_TurnOn	1
