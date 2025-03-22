@@ -41,13 +41,24 @@ class DroneControlPanel(ctk.CTk):
             "up": ctk.CTkButton(self, text="↑", font=fontbut, width=w_button, height=w_button),
             "left": ctk.CTkButton(self, text="←", font=fontbut, width=w_button, height=w_button),
             "down": ctk.CTkButton(self, text="↓", font=fontbut, width=w_button, height=w_button),
-            "right": ctk.CTkButton(self, text="→", font=fontbut, width=w_button, height=w_button)
+            "right": ctk.CTkButton(self, text="→", font=fontbut, width=w_button, height=w_button),
         }
+
+        # Emergency Stop Button
+        self.emergency_button = ctk.CTkButton(self, text="Space Bar", font=fontbut, width=350, height=75, fg_color="red", command=self.switch_emergency_stop)
+        self.emergency_button.place(relx=0.5, rely=0.88, anchor="center")
+
+        # Assign spacebar to emergency stop
+        keyboard.add_hotkey("space", self.switch_emergency_stop)
+
+        # Emergency Stop Label
+        self.emergencylabel = ctk.CTkLabel(self, text = "Emergency stop button", font=("Consolas", 25))
+        self.emergencylabel.place(relx=0.5, rely=0.79, anchor="center")
 
         #initialisation of the dictionnary
         for btn in self.buttons : 
             dico_key_pressed[btn] = False
-
+        
 
         # Position buttons to match keyboard layout
         center_x = 750
@@ -84,8 +95,6 @@ class DroneControlPanel(ctk.CTk):
         self.status_label = ctk.CTkLabel(self, text="Connection Lost", font=("Consolas", 20), fg_color="red", width=260, height=60, corner_radius=5)
         self.status_label.place(relx = 0.15, rely = 0.3, anchor = "center")
 
-
-
         # Start updating buttons
         self.update()
         
@@ -106,18 +115,20 @@ class DroneControlPanel(ctk.CTk):
         data = receive_data()
         if data != None:
             print(data)
-
-        key_has_changed = False
-        """Updates button colors based on pressed keys."""
-        for key, btn in self.buttons.items():
-            btn.configure(fg_color="green" if keyboard.is_pressed(key) else "gray")
-            if (dico_key_pressed[key] != keyboard.is_pressed(key)) :                  #We test is there is a change in the dictionnary of key states
-                dico_key_pressed[key] = keyboard.is_pressed(key)
-                if not key_has_changed:
-                    key_has_changed = True                        
-
-        if key_has_changed :         #if there is a change, we send the trame before the next update, so there is no conflicts when two buttons are pushed at the same time
-            send_command(generate_trame())             
+        
+        if emergency_stop : 
+            send_command("$11111111")
+        else : 
+            key_has_changed = False
+            """Updates button colors based on pressed keys."""
+            for key, btn in self.buttons.items():
+                btn.configure(fg_color="green" if keyboard.is_pressed(key) else "gray")
+                if (dico_key_pressed[key] != keyboard.is_pressed(key)) :                  #We test is there is a change in the dictionnary of key states
+                    dico_key_pressed[key] = keyboard.is_pressed(key)
+                    if not key_has_changed:
+                        key_has_changed = True                        
+            if key_has_changed :         #if there is a change, we send the trame before the next update, so there is no conflicts when two buttons are pushed at the same time
+                send_command(generate_trame())   
             
         # Schedule this function every UPDATE_PERIOD
         self.after(UPDATE_PERIOD, self.update)
@@ -132,6 +143,15 @@ class DroneControlPanel(ctk.CTk):
         else:
             close_connection()
             self.status_label.configure(text="Connection Interrupted", fg_color="red")
+    
+    def switch_emergency_stop(self): 
+        global emergency_stop
+        emergency_stop = not emergency_stop
+        print("Emergency stop activated" if emergency_stop else "Emergency stop diactivated")
+        if emergency_stop : 
+            self.emergency_button.configure(fg_color="grey", text = "Stop signal scent")
+        else : 
+            self.emergency_button.configure(fg_color="red", text = "Space bar")
 
 # Run the application
 if __name__ == "__main__":

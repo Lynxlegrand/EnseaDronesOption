@@ -5,6 +5,7 @@ from const import *
 
 ser = None
 dico_key_pressed = {}
+emergency_stop = False
 
 def initialize_connection():
     try:
