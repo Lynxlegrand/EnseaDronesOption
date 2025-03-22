@@ -1,5 +1,0 @@
-../Core/Src/nrf24l01.c:14:6:NRF24L01_WriteReg	1
-../Core/Src/nrf24l01.c:21:9:NRF24L01_ReadReg	1
-../Core/Src/nrf24l01.c:32:6:NRF24L01_Init	2
-../Core/Src/nrf24l01.c:52:6:NRF24L01_SendData	1
-../Core/Src/nrf24l01.c:67:9:NRF24L01_ReceiveData	1
