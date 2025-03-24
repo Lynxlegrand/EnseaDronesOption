@@ -133,8 +133,9 @@ void control_step(){
 			yaw.measurement = yaw.previous_measurement + yaw_speed*sample_time_us/1000000;
 			yaw.previous_measurement = yaw.measurement;
 
+
 			
-			height.measurement = ultrasound_measure_cm/100;
+			read_ultrasound();
 
 			//--------- Reading Commands ------------//
 			

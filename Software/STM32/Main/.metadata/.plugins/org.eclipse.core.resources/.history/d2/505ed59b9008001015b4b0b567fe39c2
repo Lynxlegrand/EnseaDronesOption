@@ -62,7 +62,7 @@ extern TIM_HandleTypeDef htim4;
 
 
 extern TIM_HandleTypeDef htim5;
-extern float ultrasound_measure_cm;
+extern int ultrasound_measure_cm;
 
 int rising = 0;
 int rising_time = 0;
@@ -238,7 +238,7 @@ void TIM4_IRQHandler(void)
 		falling_time =  htim5.Instance->CNT;
 		rising = 0;
 		pulse_duration = falling_time - rising_time;
-		ultrasound_measure_cm = (float)pulse_duration/58.31;
+		ultrasound_measure_cm = pulse_duration / 58;
 
 		if (pulse_duration >= 50000){
 			rising_time = falling_time;

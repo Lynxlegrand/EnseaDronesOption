@@ -62,7 +62,7 @@ extern TIM_HandleTypeDef htim4;
 
 
 extern TIM_HandleTypeDef htim5;
-extern float ultrasound_measure_cm;
+extern int ultrasound_measure_cm;
 
 int rising = 0;
 int rising_time = 0;
