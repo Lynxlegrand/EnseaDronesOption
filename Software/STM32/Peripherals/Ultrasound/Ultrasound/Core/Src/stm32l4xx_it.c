@@ -217,7 +217,6 @@ void TIM4_IRQHandler(void)
     rising = 0;
     pulse_duration = falling_time - rising_time;
     measure_cm = pulse_duration / 58;
-
   }
 
   /* USER CODE END TIM4_IRQn 0 */

@@ -52,6 +52,29 @@ For motor control, we have set each of the 4 motors to the **4 channels of TIM1*
 We are using the *motor mixing* algorithm to transform all of the commands (u) into a percentage of power for each of the 4 motors.
 
 
+## Table of wiring
+
+### Ultrasound
+
+| Sensor Pin  | Nucleo Pin | Purpose |
+|-------|-----|---------|
+| +5V |  +5V| Alimentation of the sensor|
+| GND  |  GND| Mass of the sensor  |
+| Trig   |  D15 | Send a pulse to the sensor to trigger the measurement |
+|Echo|D10|High state on this pin is proportional to the distance measured|
+
+
+### Motors
+
+| Sensor Pin  | Nucleo Pin | Purpose |
+|-------|-----|---------|
+| PWM Motor Front Right | D7| Control motor power|
+| PWM Motor Front Left  | D8| Control motor power  |
+| PWM Motor Back Right   |  D2 | Control motor power|
+|PWM Motor Back Left|CN10 pin 14 (male pins)|Control motor power|
+
+
+
 
 
 

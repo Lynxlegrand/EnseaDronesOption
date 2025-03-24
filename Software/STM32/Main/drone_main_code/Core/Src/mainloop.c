@@ -13,6 +13,10 @@
 
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim4;
+extern TIM_HandleTypeDef htim5;
+extern TIM_HandleTypeDef htim10;
+extern UART_HandleTypeDef huart2;
 
 
 int sample_time_us;
@@ -37,13 +41,21 @@ h_motor_t MOTOR_BACK_LEFT;
 
 int flight_allowed;
 
+int ultrasound_measure_cm = 0;
 
 
-char command[8];
+
+char command[9];
 
 
 
 void init(){
+
+
+	HAL_TIM_Base_Start(&htim5);
+	HAL_TIM_PWM_Start(&htim10, TIM_CHANNEL_1);
+	HAL_TIM_IC_Start_IT(&htim4, TIM_CHANNEL_1);
+
 
 	flight_allowed = 1;
 	sample_time_us = 825;
@@ -91,10 +103,6 @@ void init(){
 	    }
 
 
-
-
-
-	
 
 	if (flight_allowed == 1){
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 1);

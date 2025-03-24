@@ -57,7 +57,18 @@
 
 /* External variables --------------------------------------------------------*/
 extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim4;
 /* USER CODE BEGIN EV */
+
+
+extern TIM_HandleTypeDef htim5;
+extern int ultrasound_measure_cm;
+
+int rising = 0;
+int rising_time = 0;
+int falling_time = 0;
+int pulse_duration = 0;
+
 
 /* USER CODE END EV */
 
@@ -211,6 +222,35 @@ void TIM3_IRQHandler(void)
   /* USER CODE BEGIN TIM3_IRQn 1 */
   control_step();
   /* USER CODE END TIM3_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM4 global interrupt.
+  */
+void TIM4_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM4_IRQn 0 */
+	if (rising == 0){
+		rising_time = htim5.Instance->CNT;
+		rising = 1;
+	  }
+	  else{
+		falling_time =  htim5.Instance->CNT;
+		rising = 0;
+		pulse_duration = falling_time - rising_time;
+		ultrasound_measure_cm = pulse_duration / 58;
+
+		if (pulse_duration >= 50000){
+			rising_time = falling_time;
+		}
+	  }
+
+
+  /* USER CODE END TIM4_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim4);
+  /* USER CODE BEGIN TIM4_IRQn 1 */
+
+  /* USER CODE END TIM4_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
