@@ -1,0 +1,18 @@
+!SESSION 2025-03-24 07:11:48.375 -----------------------------------------------
+eclipse.buildId=Version 1.17.0
+java.version=21.0.3
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2025-03-24 07:11:59.846
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2025-03-24 07:11:59.848
+!MESSAGE Log4j2 initialized with config file C:\Cloud\EnseaDronesOption\Software\STM32\Main\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2025-03-24 07:12:03.894
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-03-24 07:12:39.083
+!MESSAGE Indexed 'drone_main_code' (28 sources, 131 headers) in 6.17 sec: 13,575 declarations; 63,184 references; 1 unresolved inclusions; 92 syntax errors; 240 unresolved names (0.31%)

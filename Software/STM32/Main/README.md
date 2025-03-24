@@ -43,7 +43,7 @@ For **emergency stop** the controller needs to send:
 For this part, we implemented a custom structure that serves as a PID. That way, we can create one object for each variable to control (pitch, roll, yaw, height).
 These object are able to differentiate and integrate the errors set as input.
 
-The output of the pid controllers is : $u = K_p.e +K_p.\int e .dt + K_d.\frac{de}{dt}$
+The output of the pid controllers is : $u = K_p.e +K_i.\int e .dt + K_d.\frac{de}{dt}$
 
 For the next courses, we will need to fine tune the parameters (Kp, Kd, and Ki)
 
