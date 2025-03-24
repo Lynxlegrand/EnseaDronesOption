@@ -1,12 +1,3 @@
-  
-/*
- *  nrf24l01_plus.h
- *
- *  Created on: 2021. 7. 20.
- *      Author: mokhwasomssi
- * 
- */
-
 
 #ifndef __NRF24L01P_H__
 #define __NRF24L01P_H__
@@ -23,7 +14,7 @@ extern UART_HandleTypeDef huart2;
 /* User Configurations */
 #define NRF24L01P_SPI                     (&hspi2)
 
-#define NRF24L01P_SPI_CS_PIN_PORT         GPIOB 
+#define NRF24L01P_SPI_CS_PIN_PORT         GPIOB
 #define NRF24L01P_SPI_CS_PIN_NUMBER       GPIO_PIN_13
 
 #define NRF24L01P_CE_PIN_PORT             GPIOB

@@ -21,7 +21,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+
 #include "nrf24l01p.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -32,7 +34,6 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
-//#define TRANSMITTER
 #define RECEIVER
 
 /* USER CODE END PD */
@@ -50,7 +51,8 @@ UART_HandleTypeDef huart2;
 /* USER CODE BEGIN PV */
 
 uint8_t rx_data[NRF24L01P_PAYLOAD_LENGTH] = {0};
-uint8_t tx_data[NRF24L01P_PAYLOAD_LENGTH] = {0, 1, 2, 3, 4, 5, 6, 7};
+uint8_t receivedString[NRF24L01P_PAYLOAD_LENGTH] = {0};
+int flag = 0;
 
 /* USER CODE END PV */
 
@@ -102,36 +104,29 @@ int main(void)
   MX_USART2_UART_Init();
   MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
+
 #ifdef RECEIVER
-  	nrf24l01p_rx_init(2500, _1Mbps);
+  	nrf24l01p_rx_init(2500, _250kbps);
 #endif
 
- #ifdef TRANSMITTER
-	nrf24l01p_tx_init(2500, _1Mbps);
- #endif
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
+	  if (flag == 1){
+		  HAL_UART_Transmit(&huart2,receivedString,NRF24L01P_PAYLOAD_LENGTH,HAL_MAX_DELAY);		//To print the received buffer
+		  flag = 0;
+	  }
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
 
 #ifdef RECEIVER
-	  // Nothing to do
-#endif
-
-#ifdef TRANSMITTER
-
-	  for(int i= 0; i < 8; i++)
-	  {
-		  tx_data[i]++;
-	  }
-
-
-	  nrf24l01p_tx_transmit(tx_data);
+	  //Nothing to do: all done in interruptions...
 #endif
 
 	  HAL_Delay(100);
@@ -328,16 +323,13 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-	if(GPIO_Pin == NRF24L01P_IRQ_PIN_NUMBER)
-	{
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+
+	if(GPIO_Pin == NRF24L01P_IRQ_PIN_NUMBER) {
 #ifdef RECEIVER
 	    nrf24l01p_rx_receive(rx_data);
-#endif
-
-#ifdef TRANSMITTER
-		nrf24l01p_tx_irq();
+	    strcpy(receivedString, rx_data);
+	    flag=1;
 #endif
 	}
 

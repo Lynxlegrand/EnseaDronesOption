@@ -21,7 +21,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+
 #include "nrf24l01p.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -33,7 +35,6 @@
 /* USER CODE BEGIN PD */
 
 #define TRANSMITTER
-//#define RECEIVER
 
 /* USER CODE END PD */
 
@@ -48,9 +49,6 @@ SPI_HandleTypeDef hspi3;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-
-uint8_t rx_data[NRF24L01P_PAYLOAD_LENGTH] = {0};
-uint8_t tx_data[NRF24L01P_PAYLOAD_LENGTH] = {0, 1, 2, 3, 4, 5, 6, 7};
 
 /* USER CODE END PV */
 
@@ -102,13 +100,11 @@ int main(void)
   MX_USART2_UART_Init();
   MX_SPI3_Init();
   /* USER CODE BEGIN 2 */
-#ifdef RECEIVER
-  	nrf24l01p_rx_init(2500, _1Mbps);
-#endif
 
  #ifdef TRANSMITTER
-	nrf24l01p_tx_init(2500, _1Mbps);
+	nrf24l01p_tx_init(2500, _250kbps);
  #endif
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -119,21 +115,9 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-#ifdef RECEIVER
-	  // Nothing to do
-#endif
-
-#ifdef TRANSMITTER
-
-	  for(int i= 0; i < 8; i++)
-	  {
-		  tx_data[i]++;
-	  }
-
-
-	  nrf24l01p_tx_transmit(tx_data);
-#endif
-
+	  char message[NRF24L01P_PAYLOAD_LENGTH] = {0};
+	  sprintf(message,"123456\n\r");
+	  nrf24l01p_tx_transmit((uint8_t*)message);
 	  HAL_Delay(100);
 
   }
@@ -336,14 +320,9 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-	if(GPIO_Pin == NRF24L01P_IRQ_PIN_NUMBER)
-	{
-#ifdef RECEIVER
-	    nrf24l01p_rx_receive(rx_data);
-#endif
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 
+	if(GPIO_Pin == NRF24L01P_IRQ_PIN_NUMBER) {
 #ifdef TRANSMITTER
 		nrf24l01p_tx_irq();
 #endif

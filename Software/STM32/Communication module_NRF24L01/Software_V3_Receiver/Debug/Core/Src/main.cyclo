@@ -4,4 +4,4 @@
 ../Core/Src/main.c:237:13:MX_USART2_UART_Init	2
 ../Core/Src/main.c:272:13:MX_GPIO_Init	1
 ../Core/Src/main.c:331:6:HAL_GPIO_EXTI_Callback	2
-../Core/Src/main.c:352:6:Error_Handler	1
+../Core/Src/main.c:353:6:Error_Handler	1

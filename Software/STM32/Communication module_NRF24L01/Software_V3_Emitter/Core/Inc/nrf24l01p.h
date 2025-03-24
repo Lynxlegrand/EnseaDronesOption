@@ -1,12 +1,3 @@
-  
-/*
- *  nrf24l01_plus.h
- *
- *  Created on: 2021. 7. 20.
- *      Author: mokhwasomssi
- * 
- */
-
 
 #ifndef __NRF24L01P_H__
 #define __NRF24L01P_H__
