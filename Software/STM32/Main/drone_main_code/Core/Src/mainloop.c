@@ -150,9 +150,11 @@ void control_step(){
 				// Height command extraction
 				if (command[1]=="1" && command[2]=="0"){
 					height.command+=height_step;
+					height.command = min(height.command, 1.5);
 				}
 				else if (command[2]=="1" && command[1]=="0"){
 					height.command-= height_step;
+					height.command = max(height.command, 0);
 				}
 
 
