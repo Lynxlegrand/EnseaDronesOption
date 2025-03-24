@@ -60,8 +60,8 @@ all: main-build
 main-build: drone_pc.elf secondary-outputs
 
 # Tool invocations
-drone_pc.elf drone_pc.map: $(OBJS) $(USER_OBJS) C:\Users\hugoc\STM32CubeIDE\workspace_1.18.0\drone_pc\STM32L476RGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "drone_pc.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\hugoc\STM32CubeIDE\workspace_1.18.0\drone_pc\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="drone_pc.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+drone_pc.elf drone_pc.map: $(OBJS) $(USER_OBJS) D:\GitHubs\Option_drone\EnseaDronesOption\codeCordi\code_stm32_pc\drone_pc\STM32L476RGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "drone_pc.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\GitHubs\Option_drone\EnseaDronesOption\codeCordi\code_stm32_pc\drone_pc\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="drone_pc.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

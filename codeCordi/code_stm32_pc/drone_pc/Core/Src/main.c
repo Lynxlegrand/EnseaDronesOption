@@ -109,8 +109,8 @@ int main(void)
 		  const char delim[] = " ";
 		  trame = strtok(command, delim);		// Convert command into char*
 
-		  //transmit_to_pc("trame well received : ");		// You can use transmit_to_pc() to send char*
-		  //transmit_to_pc(trame);
+		  transmit_to_pc("trame well received : ");		// You can use transmit_to_pc() to send char*
+		  transmit_to_pc(trame);
 		  //transmit_to_pc("end trame well received");
 		  data_received_usb = 0;
 	  }

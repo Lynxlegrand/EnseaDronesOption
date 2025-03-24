@@ -1,0 +1,33 @@
+!SESSION 2025-03-24 08:57:41.833 -----------------------------------------------
+eclipse.buildId=Version 1.18.0
+java.version=21.0.3
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=fr_FR
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -data D:\GitHubs\Option_drone\EnseaDronesOption\codeCordi\code_stm32_pc
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2025-03-24 08:57:48.790
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2025-03-24 08:57:48.792
+!MESSAGE Log4j2 initialized with config file D:\GitHubs\Option_drone\EnseaDronesOption\codeCordi\code_stm32_pc\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2025-03-24 08:57:52.279
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-03-24 09:00:16.607
+!MESSAGE Indexed 'drone_pc' (24 sources, 121 headers) in 5.3 sec: 11,697 declarations; 51,759 references; 3 unresolved inclusions; 46 syntax errors; 171 unresolved names (0.27%)
+!SESSION 2025-03-24 09:04:38.616 -----------------------------------------------
+eclipse.buildId=Version 1.18.0
+java.version=21.0.3
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=fr_FR
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2025-03-24 09:04:44.537
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2025-03-24 09:04:44.539
+!MESSAGE Log4j2 initialized with config file D:\GitHubs\Option_drone\EnseaDronesOption\codeCordi\code_stm32_pc\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2025-03-24 09:04:48.763
+!MESSAGE Started RMI Server, listening on port 41337

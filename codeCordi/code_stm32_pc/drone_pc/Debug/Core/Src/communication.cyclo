@@ -1,2 +1,2 @@
 ../Core/Src/communication.c:25:6:HAL_UART_RxCpltCallback	2
-../Core/Src/communication.c:34:6:transmit_to_pc	1
+../Core/Src/communication.c:32:6:transmit_to_pc	1
