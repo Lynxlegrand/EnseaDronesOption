@@ -1,4 +1,4 @@
-# 📡 Communication module NRF24L01 + Human Machine Interface 👨🏽   
+# 📡 NRF24L01 + Human Machine Interface 👨🏽   
 Code written by:  
 - [CARVALHO FONTES Hugo](https://github.com/HugouShare)
 - [CORDI Hugo](https://github.com/Lynxlegrand)
