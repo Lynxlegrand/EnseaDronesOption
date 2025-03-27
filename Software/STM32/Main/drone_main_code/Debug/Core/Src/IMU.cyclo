@@ -1,1 +1,6 @@
-../Core/Src/IMU.c:2:6:read_IMU	1
+../Core/Src/IMU.c:16:19:IMU_ReadRegister	1
+../Core/Src/IMU.c:22:19:IMU_ReadRegisters	1
+../Core/Src/IMU.c:28:19:IMU_Calibrate	4
+../Core/Src/IMU.c:71:19:IMU_Init	5
+../Core/Src/IMU.c:101:6:Convert_IMU_Data_All	3
+../Core/Src/IMU.c:127:19:IMU_ReadAccelGyro_Converted_All	2

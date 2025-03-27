@@ -8,10 +8,14 @@
 #include "stm32f4xx.h"
 #include <math.h>
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+
+// Peripherals handlers
 extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim4;
 extern TIM_HandleTypeDef htim5;
@@ -19,44 +23,53 @@ extern TIM_HandleTypeDef htim10;
 extern UART_HandleTypeDef huart2;
 
 
+// Main loop refresh rate
 int sample_time_us;
+
+// Movement limits
 int time_to_reach_1m;
 float height_step;
 int time_to_make_full_rotation;
 float yaw_step;
+
+// Variables storage structure
 control_variables height = {0};
 control_variables pitch = {0};
 control_variables yaw = {0};
 control_variables roll = {0};
 
+
+// PIDs
 PID heightPID = {0};
 PID pitchPID = {0};
 PID rollPID = {0};
 PID yawPID = {0};
 
+// Motors handlers
 h_motor_t MOTOR_FRONT_RIGHT;
 h_motor_t MOTOR_FRONT_LEFT;
 h_motor_t MOTOR_BACK_RIGHT;
 h_motor_t MOTOR_BACK_LEFT;
 
+
+
+// Flag for security
 int flight_allowed;
 
+
+
+// Global variables that store measurements
 float ultrasound_measure_cm = 0;
+extern float accel_g[3], gyro_dps[3], gyro_angle[3];
 
-
-
+// Command received via RF
 char command[9];
 
 
 
 void init(){
 
-
-	HAL_TIM_Base_Start(&htim5);
-	HAL_TIM_PWM_Start(&htim10, TIM_CHANNEL_1);
-	HAL_TIM_IC_Start_IT(&htim4, TIM_CHANNEL_1);
-
-
+	// Variable initializations
 	flight_allowed = 1;
 	sample_time_us = 825;
 
@@ -72,12 +85,18 @@ void init(){
 	height_step = sample_time_us/time_to_reach_1m;
 	yaw_step = 360*sample_time_us/time_to_make_full_rotation;
 
-	// Timer clock is 84 MHz
 
-	htim3.Instance->PSC = 84-1;
+	// Initialization of the mainloop timer
+	htim3.Instance->PSC = 84-1;// Timer clock is 84 MHz
 	htim3.Instance->CNT = sample_time_us;
 
 
+	// IMU initialization
+
+	IMU_Init();
+
+
+	// Motors initialization
 	MOTOR_FRONT_RIGHT.htim = &htim1;
     MOTOR_FRONT_RIGHT.channel = TIM_CHANNEL_1;
     if (motor_Init(&MOTOR_FRONT_RIGHT)== HAL_ERROR){
@@ -103,13 +122,22 @@ void init(){
 	    }
 
 
-
+	// Indicator for sucess (user led)
 	if (flight_allowed == 1){
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 1);
 	}
 	else{
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 0);
 	}
+
+
+	// Timers start
+
+	HAL_TIM_Base_Start(&htim5); // time reference
+	HAL_TIM_PWM_Start(&htim10, TIM_CHANNEL_1); // ultrasound trigger
+	HAL_TIM_IC_Start_IT(&htim4, TIM_CHANNEL_1); // ultrasound read
+	HAL_TIM_Base_Start_IT(&htim2); // IMU trigger
+	HAL_TIM_Base_Start_IT(&htim3); // main loop
 
 }
 
@@ -118,22 +146,13 @@ void control_step(){
 
 		if (flight_allowed==1){
 			//--------- Reading Sensors ------------//
-			read_IMU();
 
-			float pitch_speed;
-			float yaw_speed;
-			float roll_speed;
-
-			pitch.measurement = pitch.previous_measurement + pitch_speed*sample_time_us/1000000;
-			pitch.previous_measurement = pitch.measurement;
-
-			roll.measurement = roll.previous_measurement + roll_speed*sample_time_us/1000000;
-			roll.previous_measurement = roll.measurement;
-
-			yaw.measurement = yaw.previous_measurement + yaw_speed*sample_time_us/1000000;
-			yaw.previous_measurement = yaw.measurement;
+			pitch.measurement = gyro_angle[0];
+			roll.measurement = gyro_angle[1];
+			yaw.measurement = gyro_angle[2];
 
 			
+
 			height.measurement = ultrasound_measure_cm/100;
 
 			//--------- Reading Commands ------------//
@@ -149,11 +168,11 @@ void control_step(){
 				// Height command extraction
 				if (command[1]=="1" && command[2]=="0"){
 					height.command+=height_step;
-					height.command = min(height.command, 1.5);
+					//height.command = min(height.command, 1.5);
 				}
 				else if (command[2]=="1" && command[1]=="0"){
 					height.command-= height_step;
-					height.command = max(height.command, 0);
+					//height.command = max(height.command, 0);
 				}
 
 

@@ -73,6 +73,16 @@ We are using the *motor mixing* algorithm to transform all of the commands (u) i
 | PWM Motor Back Right   |  D2 | Control motor power|
 |PWM Motor Back Left|CN10 pin 14 (male pins)|Control motor power|
 
+### IMU
+
+| Sensor Pin  | Nucleo Pin | Purpose |
+|-------|-----|---------|
+| VCC | +5V| Alimentation fot the sensor|
+| GND  | GND| Mass of the sensor  |
+| SDA   |  D14 | Data of I2C connection|
+|SCL|D6|Clock of I2C connection|
+
+
 
 
 

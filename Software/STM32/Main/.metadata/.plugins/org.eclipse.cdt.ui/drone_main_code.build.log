@@ -1,100 +1,17 @@
-08:35:07 **** Incremental Build of configuration Debug for project drone_main_code ****
+09:09:25 **** Incremental Build of configuration Debug for project drone_main_code ****
 make -j8 all 
-arm-none-eabi-gcc "../Core/Src/mainloop.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mainloop.d" -MT"Core/Src/mainloop.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mainloop.o"
-../Core/Src/mainloop.c: In function 'control_step':
-../Core/Src/mainloop.c:151:47: warning: comparison between pointer and integer
-  151 |                                 if (command[1]=="1" && command[2]=="0"){
-      |                                               ^~
-../Core/Src/mainloop.c:151:47: warning: comparison with string literal results in unspecified behavior [-Waddress]
-../Core/Src/mainloop.c:151:66: warning: comparison between pointer and integer
-  151 |                                 if (command[1]=="1" && command[2]=="0"){
-      |                                                                  ^~
-../Core/Src/mainloop.c:151:66: warning: comparison with string literal results in unspecified behavior [-Waddress]
-../Core/Src/mainloop.c:154:52: warning: comparison between pointer and integer
-  154 |                                 else if (command[2]=="1" && command[1]=="0"){
-      |                                                    ^~
-../Core/Src/mainloop.c:154:52: warning: comparison with string literal results in unspecified behavior [-Waddress]
-../Core/Src/mainloop.c:154:71: warning: comparison between pointer and integer
-  154 |                                 else if (command[2]=="1" && command[1]=="0"){
-      |                                                                       ^~
-../Core/Src/mainloop.c:154:71: warning: comparison with string literal results in unspecified behavior [-Waddress]
-../Core/Src/mainloop.c:160:47: warning: comparison between pointer and integer
-  160 |                                 if (command[3]=="1" && command[4]=="0"){
-      |                                               ^~
-../Core/Src/mainloop.c:160:47: warning: comparison with string literal results in unspecified behavior [-Waddress]
-../Core/Src/mainloop.c:160:66: warning: comparison between pointer and integer
-  160 |                                 if (command[3]=="1" && command[4]=="0"){
-      |                                                                  ^~
-../Core/Src/mainloop.c:160:66: warning: comparison with string literal results in unspecified behavior [-Waddress]
-../Core/Src/mainloop.c:163:52: warning: comparison between pointer and integer
-  163 |                                 else if (command[4]=="1" && command[3]=="0"){
-      |                                                    ^~
-../Core/Src/mainloop.c:163:52: warning: comparison with string literal results in unspecified behavior [-Waddress]
-../Core/Src/mainloop.c:163:71: warning: comparison between pointer and integer
-  163 |                                 else if (command[4]=="1" && command[3]=="0"){
-      |                                                                       ^~
-../Core/Src/mainloop.c:163:71: warning: comparison with string literal results in unspecified behavior [-Waddress]
-../Core/Src/mainloop.c:173:47: warning: comparison between pointer and integer
-  173 |                                 if (command[5]=="1" && command[6]=="0"){
-      |                                               ^~
-../Core/Src/mainloop.c:173:47: warning: comparison with string literal results in unspecified behavior [-Waddress]
-../Core/Src/mainloop.c:173:66: warning: comparison between pointer and integer
-  173 |                                 if (command[5]=="1" && command[6]=="0"){
-      |                                                                  ^~
-../Core/Src/mainloop.c:173:66: warning: comparison with string literal results in unspecified behavior [-Waddress]
-../Core/Src/mainloop.c:176:52: warning: comparison between pointer and integer
-  176 |                                 else if (command[6]=="1" && command[5]=="0"){
-      |                                                    ^~
-../Core/Src/mainloop.c:176:52: warning: comparison with string literal results in unspecified behavior [-Waddress]
-../Core/Src/mainloop.c:176:71: warning: comparison between pointer and integer
-  176 |                                 else if (command[6]=="1" && command[5]=="0"){
-      |                                                                       ^~
-../Core/Src/mainloop.c:176:71: warning: comparison with string literal results in unspecified behavior [-Waddress]
-../Core/Src/mainloop.c:185:47: warning: comparison between pointer and integer
-  185 |                                 if (command[7]=="1" && command[8]=="0"){
-      |                                               ^~
-../Core/Src/mainloop.c:185:47: warning: comparison with string literal results in unspecified behavior [-Waddress]
-../Core/Src/mainloop.c:185:66: warning: comparison between pointer and integer
-  185 |                                 if (command[7]=="1" && command[8]=="0"){
-      |                                                                  ^~
-../Core/Src/mainloop.c:185:66: warning: comparison with string literal results in unspecified behavior [-Waddress]
-../Core/Src/mainloop.c:188:52: warning: comparison between pointer and integer
-  188 |                                 else if (command[8]=="1" && command[7]=="0"){
-      |                                                    ^~
-../Core/Src/mainloop.c:188:52: warning: comparison with string literal results in unspecified behavior [-Waddress]
-../Core/Src/mainloop.c:188:71: warning: comparison between pointer and integer
-  188 |                                 else if (command[8]=="1" && command[7]=="0"){
-      |                                                                       ^~
-../Core/Src/mainloop.c:188:71: warning: comparison with string literal results in unspecified behavior [-Waddress]
-../Core/Src/mainloop.c:127:85: warning: 'pitch_speed' may be used uninitialized [-Wmaybe-uninitialized]
-  127 |                         pitch.measurement = pitch.previous_measurement + pitch_speed*sample_time_us/1000000;
-      |                                                                          ~~~~~~~~~~~^~~~~~~~~~~~~~~
-../Core/Src/mainloop.c:123:31: note: 'pitch_speed' was declared here
-  123 |                         float pitch_speed;
-      |                               ^~~~~~~~~~~
-../Core/Src/mainloop.c:130:82: warning: 'roll_speed' may be used uninitialized [-Wmaybe-uninitialized]
-  130 |                         roll.measurement = roll.previous_measurement + roll_speed*sample_time_us/1000000;
-      |                                                                        ~~~~~~~~~~^~~~~~~~~~~~~~~
-../Core/Src/mainloop.c:125:31: note: 'roll_speed' was declared here
-  125 |                         float roll_speed;
-      |                               ^~~~~~~~~~
-../Core/Src/mainloop.c:133:79: warning: 'yaw_speed' may be used uninitialized [-Wmaybe-uninitialized]
-  133 |                         yaw.measurement = yaw.previous_measurement + yaw_speed*sample_time_us/1000000;
-      |                                                                      ~~~~~~~~~^~~~~~~~~~~~~~~
-../Core/Src/mainloop.c:124:31: note: 'yaw_speed' was declared here
-  124 |                         float yaw_speed;
-      |                               ^~~~~~~~~
+arm-none-eabi-gcc "../Core/Src/IMU.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/IMU.d" -MT"Core/Src/IMU.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/IMU.o"
 arm-none-eabi-gcc -o "drone_main_code.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Cloud\EnseaDronesOption\Software\STM32\Main\drone_main_code\STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="drone_main_code.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: drone_main_code.elf
  
 arm-none-eabi-size  drone_main_code.elf 
 arm-none-eabi-objdump -h -S drone_main_code.elf  > "drone_main_code.list"
    text	   data	    bss	    dec	    hex	filename
-  20104	     12	   2284	  22400	   5780	drone_main_code.elf
+  26316	     16	   2488	  28820	   7094	drone_main_code.elf
 Finished building: default.size.stdout
  
 Finished building: drone_main_code.list
  
 
-08:35:08 Build Finished. 0 errors, 35 warnings. (took 1s.602ms)
+09:09:26 Build Finished. 0 errors, 0 warnings. (took 1s.281ms)
 
