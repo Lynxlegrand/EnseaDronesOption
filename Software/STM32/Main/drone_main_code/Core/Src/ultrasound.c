@@ -1,5 +1,0 @@
-
-
-int* read_ultrasound(){
-    
-}

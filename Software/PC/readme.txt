@@ -1,0 +1,1 @@
+faut il empêcher les touches contradictioires (ex : haut+bas)
