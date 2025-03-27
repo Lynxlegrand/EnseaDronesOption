@@ -60,8 +60,8 @@ all: main-build
 main-build: Software_V3_Emitter.elf secondary-outputs
 
 # Tool invocations
-Software_V3_Emitter.elf Software_V3_Emitter.map: $(OBJS) $(USER_OBJS) C:\Users\hugof\STM32CubeIDE\workspace_1.18.0\Software_V3_Emitter\STM32L476RGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Software_V3_Emitter.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\hugof\STM32CubeIDE\workspace_1.18.0\Software_V3_Emitter\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Software_V3_Emitter.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Software_V3_Emitter.elf Software_V3_Emitter.map: $(OBJS) $(USER_OBJS) D:\GitHubs\Option_drone\EnseaDronesOption\Software\STM32\Software_V3_Emitter\STM32L476RGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Software_V3_Emitter.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\GitHubs\Option_drone\EnseaDronesOption\Software\STM32\Software_V3_Emitter\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Software_V3_Emitter.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

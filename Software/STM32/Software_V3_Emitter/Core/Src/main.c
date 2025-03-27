@@ -63,9 +63,8 @@ static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_SPI3_Init(void);
 /* USER CODE BEGIN PFP */
-
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
+extern void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
 
 /* USER CODE END PFP */
 
@@ -107,7 +106,7 @@ int main(void)
   MX_SPI3_Init();
   /* USER CODE BEGIN 2 */
 
-  HAL_UART_Receive_IT(&huart2, (uint8_t*)command, BUFF_SIZE);
+ HAL_UART_Receive_IT(&huart2, (uint8_t*)command, BUFF_SIZE);
 
  #ifdef TRANSMITTER			//NRF24L01 Private variables
 	nrf24l01p_tx_init(2500, _250kbps);
@@ -123,26 +122,33 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	  /*
+
 	  if (data_received_usb == 1)
 	  {
 		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 1);
 
-		  const char delim[] = " ";
-		  trame = strtok(command, delim);		// Convert command into char*
-
 		  //transmit_to_pc("trame well received : ");
 		  //transmit_to_pc(trame);
 
+		  const char delim[] = " ";
+		  trame = strtok(command, delim);		// Convert command into char*
+
+		  char message[NRF24L01P_PAYLOAD_LENGTH] = {0};
+		  sprintf(message,trame);
+		  nrf24l01p_tx_transmit((uint8_t*)message);
+		  HAL_Delay(100);
+
 		  data_received_usb = 0;
 	  }
-	  */
 
+
+	  /*
 	  char message[NRF24L01P_PAYLOAD_LENGTH] = {0};
-	  sprintf(message,"123456\n\r");
-	  //sprintf(message,trame);
+	  sprintf(message,"12345\n\r");
 	  nrf24l01p_tx_transmit((uint8_t*)message);
 	  HAL_Delay(100);
+	  */
+
 
   }
 

@@ -1,0 +1,24 @@
+!SESSION 2025-03-27 11:26:29.110 -----------------------------------------------
+eclipse.buildId=Version 1.18.0
+java.version=21.0.3
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=fr_FR
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2025-03-27 11:26:38.522
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2025-03-27 11:26:38.525
+!MESSAGE Log4j2 initialized with config file D:\GitHubs\Option_drone\EnseaDronesOption\Software\STM32\Communication module_NRF24L01\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2025-03-27 11:26:43.119
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-03-27 11:27:27.684
+!MESSAGE Indexed 'Software_V3_Emitter' (27 sources, 126 headers) in 6.73 sec: 12,441 declarations; 58,497 references; 3 unresolved inclusions; 46 syntax errors; 171 unresolved names (0.24%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-03-27 11:41:55.914
+!MESSAGE Indexed 'Software_V3_Emitter' (28 sources, 126 headers) in 3.36 sec: 12,492 declarations; 59,030 references; 3 unresolved inclusions; 46 syntax errors; 171 unresolved names (0.24%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2025-03-27 11:41:59.442
+!MESSAGE Indexed 'Software_V3_Emitter' (27 sources, 126 headers) in 2.96 sec: 12,452 declarations; 58,515 references; 3 unresolved inclusions; 46 syntax errors; 171 unresolved names (0.24%)

@@ -15,7 +15,7 @@
 #include <stdlib.h>
 
 
-#define BUFF_SIZE 128
+#define BUFF_SIZE 16
 
 
 extern UART_HandleTypeDef huart2;
