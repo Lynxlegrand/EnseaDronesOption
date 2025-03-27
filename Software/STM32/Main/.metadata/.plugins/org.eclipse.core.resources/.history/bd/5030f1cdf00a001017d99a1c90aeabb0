@@ -1,0 +1,10 @@
+HAL_StatusTypeDef IMU_Init();
+HAL_StatusTypeDef IMU_ReadRegister(uint16_t reg, uint8_t *data);
+HAL_StatusTypeDef IMU_ReadRegisters(uint16_t reg, uint8_t *data, uint16_t length);
+
+HAL_StatusTypeDef IMU_Calibrate();
+
+
+
+#define IMU_I2C_ADDR  0x68 << 1  // Endereço I2C da IMU (shiftado para a função HAL)
+#define WHO_AM_I_REG  0x75
