@@ -127,16 +127,18 @@ int main(void)
 	  {
 		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 1);
 
-		  //transmit_to_pc("trame well received : ");
-		  //transmit_to_pc(trame);
-
 		  const char delim[] = " ";
 		  trame = strtok(command, delim);		// Convert command into char*
+
+		  //transmit_to_pc(trame);
 
 		  char message[NRF24L01P_PAYLOAD_LENGTH] = {0};
 		  sprintf(message,trame);
 		  nrf24l01p_tx_transmit((uint8_t*)message);
+
+		  memset(command, 0, BUFF_SIZE);  // Efface l'ancien message
 		  HAL_Delay(100);
+
 
 		  data_received_usb = 0;
 	  }
