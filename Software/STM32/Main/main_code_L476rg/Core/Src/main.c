@@ -113,7 +113,7 @@ int main(void)
   MX_I2C2_Init();
   MX_TIM8_Init();
   /* USER CODE BEGIN 2 */
-  init();
+  run();
   /* USER CODE END 2 */
 
   /* Infinite loop */

@@ -1,10 +1,10 @@
-11:00:35 **** Incremental Build of configuration Debug for project main_code_L476rg ****
+21:30:28 **** Incremental Build of configuration Debug for project main_code_L476rg ****
 make -j8 all 
 arm-none-eabi-size  main_code_L476rg.elf 
    text	   data	    bss	    dec	    hex	filename
-  31784	     16	   2576	  34376	   8648	main_code_L476rg.elf
+  45984	    472	   2920	  49376	   c0e0	main_code_L476rg.elf
 Finished building: default.size.stdout
  
 
-11:00:36 Build Finished. 0 errors, 0 warnings. (took 425ms)
+21:30:29 Build Finished. 0 errors, 0 warnings. (took 486ms)
 

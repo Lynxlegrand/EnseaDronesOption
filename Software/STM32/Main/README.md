@@ -35,7 +35,7 @@ Via the RF antenna, we receive a string of this format:
 where {x} is either 0 or 1 to describe the key that has been pressed
 
 For **emergency stop** the controller needs to send:
-- **"$11111111"**
+- **"stop"**
 
 
 ### Control of angles and altitude
@@ -53,14 +53,14 @@ We are using the *motor mixing* algorithm to transform all of the commands (u) i
 
 
 ## Table of wiring
-
+CAUTION: these tables applies to the STM32l476rg
 ### Ultrasound
 
 | Sensor Pin  | Nucleo Pin | Purpose |
 |-------|-----|---------|
 | +5V |  +5V| Alimentation of the sensor|
 | GND  |  GND| Mass of the sensor  |
-| Trig   |  D15 | Send a pulse to the sensor to trigger the measurement |
+| Trig   |  CN10 pin 4 (male pins)| Send a pulse to the sensor to trigger the measurement |
 |Echo|D10|High state on this pin is proportional to the distance measured|
 
 
@@ -79,7 +79,7 @@ We are using the *motor mixing* algorithm to transform all of the commands (u) i
 |-------|-----|---------|
 | VCC | +5V| Alimentation fot the sensor|
 | GND  | GND| Mass of the sensor  |
-| SDA   |  D14 | Data of I2C connection|
+| SDA   |  CN10 pin 18 (male pins)| Data of I2C connection|
 |SCL|D6|Clock of I2C connection|
 
 

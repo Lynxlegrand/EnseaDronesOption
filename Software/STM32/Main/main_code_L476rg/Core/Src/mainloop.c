@@ -4,6 +4,7 @@
 #include "ultrasound.h"
 #include "variable.h"
 #include "PID.h"
+#include "states.h"
 
 #include "stm32l4xx.h"
 #include <math.h>
@@ -23,6 +24,8 @@ extern TIM_HandleTypeDef htim8;
 extern UART_HandleTypeDef huart2;
 
 
+// State global variable
+int state;
 // Main loop refresh rate
 int sample_time_us;
 
@@ -63,9 +66,114 @@ float ultrasound_measure_cm = 0;
 extern float accel_g[3], gyro_dps[3], gyro_angle[3];
 
 // Command received via RF
-char command[9];
+char received_command[BUFFER_SIZE];
+char validated_command[BUFFER_SIZE];
+
+#define MIN(a,b) ((a) < (b) ? (a) : (b))
+
+#define MAX(a,b) ((a) > (b)? (a) : (b))
+
+void run(){
+
+	// Initialize RF communication
+	//........
+	//
+
+	state = IDLE_STATE;
+	while(1){
+		if (state == INITIALIZE_STATE){
+			init();
+			state == FLYING_STATE;
+		}
+
+		if (state == STOP_STATE){
+			stop();
+			state = IDLE_STATE;
+
+		}
+
+		if (state == COEFFICENT_MODIFICATION_STATE){
+			PID modified_pid;
+
+			switch(validated_command[1]){
+				case 'H':
+				    modified_pid = heightPID;
+                    break;
+				case 'P':
+				    modified_pid = pitchPID;
+					break;
+				case 'R':
+				    modified_pid = rollPID;
+					break;
+				case 'Y':
+				    modified_pid = yawPID;
+					break;
+			}
+
+			char value_string[5];
+			for (int i = 0; i < 5; i++){
+				value_string[i] = validated_command[i+3];
+			}
+			float value = atof(value_string);
 
 
+			switch(validated_command[2]) {
+				case 'P':
+				    modified_pid.kp = value;
+				    break;
+				case 'I':
+				    modified_pid.ki = value;
+					break;
+				case 'D':
+				    modified_pid.kd = value;
+					break;
+			}
+			state = IDLE_STATE;
+		}
+
+	}
+}
+
+int is_data_frame_valid(char data_frame[BUFFER_SIZE]){
+	if (data_frame[0] != '$'){
+		return 0;
+	}
+	if (strlen(data_frame)!= BUFFER_SIZE){
+        return 0;
+    }
+
+	return 1;
+}
+void RF_callback(){
+
+	// received_command stores the message sent by the PC
+	if (is_data_frame_valid(received_command)==0){
+		return;
+	}
+
+	switch(state){
+			case FLYING_STATE:
+				if (received_command[1]=='0' |received_command[1]=='1'){
+						strcpy(validated_command, received_command);
+					}
+				else if (strcmp(received_command, "stop")==0){
+					state = STOP_STATE;
+				}
+				break;
+
+			case IDLE_STATE:
+				if (strcmp(received_command, "start")==0){
+							state = INITIALIZE_STATE;
+						}
+				else if (received_command[0] == '£'){ 
+					state = COEFFICENT_MODIFICATION_STATE;
+					strcpy(validated_command, received_command);
+				}
+				break;
+
+			}
+
+}
 
 void init(){
 
@@ -122,7 +230,7 @@ void init(){
 	    }
 
 
-	// Indicator for sucess (user led)
+	// Indicator for success (user led)
 	if (flight_allowed == 1){
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 1);
 	}
@@ -141,6 +249,21 @@ void init(){
 
 }
 
+void stop(){
+	flight_allowed = 0;
+
+	HAL_TIM_Base_Stop(&htim5); // time reference
+	HAL_TIM_PWM_Stop(&htim8, TIM_CHANNEL_1); // ultrasound trigger
+	HAL_TIM_IC_Stop_IT(&htim4, TIM_CHANNEL_1); // ultrasound read
+	HAL_TIM_Base_Stop_IT(&htim2); // IMU trigger
+	HAL_TIM_Base_Stop_IT(&htim3); // main loop
+
+	motor_SetPower(&MOTOR_FRONT_RIGHT, 0);
+	motor_SetPower(&MOTOR_FRONT_LEFT, 0);
+	motor_SetPower(&MOTOR_BACK_RIGHT, 0);
+	motor_SetPower(&MOTOR_BACK_LEFT, 0);
+}
+
 
 void control_step(){
 
@@ -156,61 +279,53 @@ void control_step(){
 			height.measurement = ultrasound_measure_cm/100;
 
 			//--------- Reading Commands ------------//
-			
-			read_RF();
 
-			if (command[0]=='$'){// Verifying that the command was entirely received
-				motor_SetPower(&MOTOR_FRONT_RIGHT, 0);
-				motor_SetPower(&MOTOR_FRONT_LEFT, 0);
-				motor_SetPower(&MOTOR_BACK_RIGHT, 0);
-				motor_SetPower(&MOTOR_BACK_LEFT, 0);
+			// Height command extraction
+			if (validated_command[1]=="1" && validated_command[2]=="0"){
+				height.command+=height_step;
+				height.command = MIN(height.command, 1.5);
 			}
-				// Height command extraction
-				if (command[1]=="1" && command[2]=="0"){
-					height.command+=height_step;
-					//height.command = min(height.command, 1.5);
-				}
-				else if (command[2]=="1" && command[1]=="0"){
-					height.command-= height_step;
-					//height.command = max(height.command, 0);
-				}
+			else if (validated_command[2]=="1" && validated_command[1]=="0"){
+				height.command-= height_step;
+				height.command = MAX(height.command, 0);
+			}
 
 
-				// Pitch command extraction
-				if (command[3]=="1" && command[4]=="0"){
-					pitch.command=1;
-				}
-				else if (command[4]=="1" && command[3]=="0"){
-					pitch.command=-1;
-				}
+			// Pitch command extraction
+			if (validated_command[3]=="1" && validated_command[4]=="0"){
+				pitch.command=1;
+			}
+			else if (validated_command[4]=="1" && validated_command[3]=="0"){
+				pitch.command=-1;
+			}
 
-				else{
-					pitch.command=0;
-				}
+			else{
+				pitch.command=0;
+			}
 
 
-				// Roll command extraction
-				if (command[5]=="1" && command[6]=="0"){
-					roll.command=1;
-				}
-				else if (command[6]=="1" && command[5]=="0"){
-					roll.command=-1;
-				}
+			// Roll command extraction
+			if (validated_command[5]=="1" && validated_command[6]=="0"){
+				roll.command=1;
+			}
+			else if (validated_command[6]=="1" && validated_command[5]=="0"){
+				roll.command=-1;
+			}
 
-				else{
-					roll.command=0;
-				}
+			else{
+				roll.command=0;
+			}
 
-				// Yaw command extraction
-				if (command[7]=="1" && command[8]=="0"){
-					yaw.command+=yaw_step;
-				}
-				else if (command[8]=="1" && command[7]=="0"){
-					yaw.command-= yaw_step;
-				}
+			// Yaw command extraction
+			if (validated_command[7]=="1" && validated_command[8]=="0"){
+				yaw.command+=yaw_step;
+			}
+			else if (validated_command[8]=="1" && validated_command[7]=="0"){
+				yaw.command-= yaw_step;
+			}
 
-				if (strcmp(command, "$11111111")==0){
-					flight_allowed = 0;
+			if (strcmp(validated_command, "$11111111")==0){
+				flight_allowed = 0;
 			}
 
 			//--------- Processing data ------------//
