@@ -5,6 +5,7 @@ from const import *
 
 ser = None
 dico_key_pressed = {}
+pid_values_to_change = []
 emergency_stop = False
 
 def initialize_connection():
@@ -90,6 +91,11 @@ def generate_trame() :
         trame += ""
     return(trame)
 
-
+def generate_pid_trame(key, value) : 
+    Lkey = key.split("_")
+    assert(value<1000.0)
+    rValue = f"{value:06.2f}"  # 6 caractères, 2 décimales
+    trame = "*" + Lkey[0][0] + Lkey[1] + str(rValue)
+    return(trame)
 
 

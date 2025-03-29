@@ -44,6 +44,33 @@ class DroneControlPanel(ctk.CTk):
             "right": ctk.CTkButton(self, text="→", font=fontbut, width=w_button, height=w_button),
         }
 
+        # PID Adjustment Section
+        self.pid_entries = {}
+        pid_params = ["Height", "Pitch", "Roll", "Yaw"]
+        pid_types = ["P", "I", "D"]
+
+        frame = ctk.CTkFrame(self)
+        frame.place(relx=0.15, rely=0.45, anchor="center")
+
+        # Ajout des labels "P", "I", "D" en haut
+        for j, p_type in enumerate(pid_types):
+            ctk.CTkLabel(frame, text=p_type, font=("Consolas", 20, "bold")).grid(row=0, column=j+1, padx=10, pady=5)
+
+        # Ajout des labels pour chaque paramètre PID et des champs de saisie
+        for i, param in enumerate(pid_params):
+            ctk.CTkLabel(frame, text=param, font=("Consolas", 20, "bold")).grid(row=i+1, column=0, padx=10, pady=5)
+
+            for j, p_type in enumerate(pid_types):
+                entry = ctk.CTkEntry(frame, width=100, font=("Consolas", 15), justify = "center")
+                entry.insert(0, "Default")
+                entry.grid(row=i+1, column=j+1, padx=10, pady=5)
+                self.pid_entries[f"{param}_{p_type}"] = entry
+
+        # Send Button PID
+        self.send_pid_button = ctk.CTkButton(frame, text="Send", font=("Consolas", 20),command=self.fill_pid_values_to_change)
+        self.send_pid_button.grid(row=len(pid_params) + 1, columnspan=4, pady=10)
+
+
         # Emergency Stop Button
         self.emergency_button = ctk.CTkButton(self, text="Space Bar", font=fontbut, width=350, height=75, fg_color="red", command=self.switch_emergency_stop)
         self.emergency_button.place(relx=0.5, rely=0.88, anchor="center")
@@ -87,13 +114,13 @@ class DroneControlPanel(ctk.CTk):
 
          # Bouton switch (toggle)
         self.toggle_button = ctk.CTkSwitch(self, text="Connection",font=("Consolas", 20), width=100, height=50, switch_width=75, switch_height=35, command=self.toggle_connection)
-        self.toggle_button.place(relx = 0.15, rely = 0.2, anchor = "center")
+        self.toggle_button.place(relx = 0.15, rely = 0.05, anchor = "center")
         # État de la connexion
         self.is_connected = False
 
         # Label de statut
         self.status_label = ctk.CTkLabel(self, text="Connection Lost", font=("Consolas", 20), fg_color="red", width=260, height=60, corner_radius=5)
-        self.status_label.place(relx = 0.15, rely = 0.3, anchor = "center")
+        self.status_label.place(relx = 0.15, rely = 0.13, anchor = "center")
 
         # Start updating buttons
         self.update()
@@ -115,9 +142,14 @@ class DroneControlPanel(ctk.CTk):
         data = receive_data()
         if data != None:
             print(data)
-        
         if emergency_stop : 
-            send_command("$11111111")
+            send_command("stop")
+        elif len(pid_values_to_change)!=0:
+            n = len(pid_values_to_change)
+            key = pid_values_to_change[n-1][0]
+            value = pid_values_to_change[n-1][1]
+            pid_values_to_change.pop()
+            send_command(generate_pid_trame(key, value))
         else : 
             key_has_changed = False
             """Updates button colors based on pressed keys."""
@@ -152,6 +184,22 @@ class DroneControlPanel(ctk.CTk):
             self.emergency_button.configure(fg_color="grey", text = "Stop signal scent")
         else : 
             self.emergency_button.configure(fg_color="red", text = "Space bar")
+    
+    
+    def fill_pid_values_to_change(self) : 
+        self.focus_set()
+        for key, entry in self.pid_entries.items():
+            value = entry.get()
+            if value != "Default" : 
+                try :
+                    value = float(value)  
+                    pid_values_to_change.append([key,value])
+                except(Exception) : 
+                    entry.delete(0, "end")  # Effacer le champ
+                    entry.insert(0, "Default")  # Remettre "Default"
+
+
+        
 
 # Run the application
 if __name__ == "__main__":
