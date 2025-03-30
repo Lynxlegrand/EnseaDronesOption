@@ -50,7 +50,7 @@ class DroneControlPanel(ctk.CTk):
         pid_types = ["P", "I", "D"]
 
         frame = ctk.CTkFrame(self)
-        frame.place(relx=0.15, rely=0.45, anchor="center")
+        frame.place(relx=0.85, rely=0.45, anchor="center")
 
         # Ajout des labels "P", "I", "D" en haut
         for j, p_type in enumerate(pid_types):
@@ -114,14 +114,18 @@ class DroneControlPanel(ctk.CTk):
 
          # Bouton switch (toggle)
         self.toggle_button = ctk.CTkSwitch(self, text="Connection",font=("Consolas", 20), width=100, height=50, switch_width=75, switch_height=35, command=self.toggle_connection)
-        self.toggle_button.place(relx = 0.15, rely = 0.05, anchor = "center")
+        self.toggle_button.place(relx = 0.15, rely = 0.15, anchor = "center")
         # État de la connexion
         self.is_connected = False
 
         # Label de statut
         self.status_label = ctk.CTkLabel(self, text="Connection Lost", font=("Consolas", 20), fg_color="red", width=260, height=60, corner_radius=5)
-        self.status_label.place(relx = 0.15, rely = 0.13, anchor = "center")
+        self.status_label.place(relx = 0.15, rely = 0.25, anchor = "center") 
 
+        #Start button
+        self.start_button = ctk.CTkButton(self, text = "Start engine",font=("Consolas", 20), fg_color="green", width=260, height=60, corner_radius=50, command= self.toggle_start_button)    
+        self.start_button.place(relx = 0.15, rely = 0.5, anchor = "center")
+        self.send_start = None
         # Start updating buttons
         self.update()
         
@@ -144,6 +148,9 @@ class DroneControlPanel(ctk.CTk):
             print(data)
         if emergency_stop : 
             send_command("stop")
+        if self.send_start : 
+            send_command("start")
+            self.send_start = False
         elif len(pid_values_to_change)!=0:
             n = len(pid_values_to_change)
             key = pid_values_to_change[n-1][0]
@@ -197,6 +204,11 @@ class DroneControlPanel(ctk.CTk):
                 except(Exception) : 
                     entry.delete(0, "end")  # Effacer le champ
                     entry.insert(0, "Default")  # Remettre "Default"
+    
+    def toggle_start_button (self) : 
+        if self.send_start == None and self.toggle_button.get() == 1 : 
+            self.send_start = True
+            self.start_button.configure(fg_color="grey", text = "Start signal scent")
 
 
         
