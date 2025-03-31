@@ -11,6 +11,7 @@ C_SRCS += \
 ../Core/Src/RF.c \
 ../Core/Src/main.c \
 ../Core/Src/mainloop.c \
+../Core/Src/nrf24l01p.c \
 ../Core/Src/stm32l4xx_hal_msp.c \
 ../Core/Src/stm32l4xx_it.c \
 ../Core/Src/syscalls.c \
@@ -25,6 +26,7 @@ OBJS += \
 ./Core/Src/RF.o \
 ./Core/Src/main.o \
 ./Core/Src/mainloop.o \
+./Core/Src/nrf24l01p.o \
 ./Core/Src/stm32l4xx_hal_msp.o \
 ./Core/Src/stm32l4xx_it.o \
 ./Core/Src/syscalls.o \
@@ -39,6 +41,7 @@ C_DEPS += \
 ./Core/Src/RF.d \
 ./Core/Src/main.d \
 ./Core/Src/mainloop.d \
+./Core/Src/nrf24l01p.d \
 ./Core/Src/stm32l4xx_hal_msp.d \
 ./Core/Src/stm32l4xx_it.d \
 ./Core/Src/syscalls.d \
@@ -54,7 +57,7 @@ Core/Src/%.o Core/Src/%.su Core/Src/%.cyclo: ../Core/Src/%.c Core/Src/subdir.mk
 clean: clean-Core-2f-Src
 
 clean-Core-2f-Src:
-	-$(RM) ./Core/Src/ESC.cyclo ./Core/Src/ESC.d ./Core/Src/ESC.o ./Core/Src/ESC.su ./Core/Src/IMU.cyclo ./Core/Src/IMU.d ./Core/Src/IMU.o ./Core/Src/IMU.su ./Core/Src/PID.cyclo ./Core/Src/PID.d ./Core/Src/PID.o ./Core/Src/PID.su ./Core/Src/RF.cyclo ./Core/Src/RF.d ./Core/Src/RF.o ./Core/Src/RF.su ./Core/Src/main.cyclo ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/main.su ./Core/Src/mainloop.cyclo ./Core/Src/mainloop.d ./Core/Src/mainloop.o ./Core/Src/mainloop.su ./Core/Src/stm32l4xx_hal_msp.cyclo ./Core/Src/stm32l4xx_hal_msp.d ./Core/Src/stm32l4xx_hal_msp.o ./Core/Src/stm32l4xx_hal_msp.su ./Core/Src/stm32l4xx_it.cyclo ./Core/Src/stm32l4xx_it.d ./Core/Src/stm32l4xx_it.o ./Core/Src/stm32l4xx_it.su ./Core/Src/syscalls.cyclo ./Core/Src/syscalls.d ./Core/Src/syscalls.o ./Core/Src/syscalls.su ./Core/Src/sysmem.cyclo ./Core/Src/sysmem.d ./Core/Src/sysmem.o ./Core/Src/sysmem.su ./Core/Src/system_stm32l4xx.cyclo ./Core/Src/system_stm32l4xx.d ./Core/Src/system_stm32l4xx.o ./Core/Src/system_stm32l4xx.su ./Core/Src/ultrasound.cyclo ./Core/Src/ultrasound.d ./Core/Src/ultrasound.o ./Core/Src/ultrasound.su
+	-$(RM) ./Core/Src/ESC.cyclo ./Core/Src/ESC.d ./Core/Src/ESC.o ./Core/Src/ESC.su ./Core/Src/IMU.cyclo ./Core/Src/IMU.d ./Core/Src/IMU.o ./Core/Src/IMU.su ./Core/Src/PID.cyclo ./Core/Src/PID.d ./Core/Src/PID.o ./Core/Src/PID.su ./Core/Src/RF.cyclo ./Core/Src/RF.d ./Core/Src/RF.o ./Core/Src/RF.su ./Core/Src/main.cyclo ./Core/Src/main.d ./Core/Src/main.o ./Core/Src/main.su ./Core/Src/mainloop.cyclo ./Core/Src/mainloop.d ./Core/Src/mainloop.o ./Core/Src/mainloop.su ./Core/Src/nrf24l01p.cyclo ./Core/Src/nrf24l01p.d ./Core/Src/nrf24l01p.o ./Core/Src/nrf24l01p.su ./Core/Src/stm32l4xx_hal_msp.cyclo ./Core/Src/stm32l4xx_hal_msp.d ./Core/Src/stm32l4xx_hal_msp.o ./Core/Src/stm32l4xx_hal_msp.su ./Core/Src/stm32l4xx_it.cyclo ./Core/Src/stm32l4xx_it.d ./Core/Src/stm32l4xx_it.o ./Core/Src/stm32l4xx_it.su ./Core/Src/syscalls.cyclo ./Core/Src/syscalls.d ./Core/Src/syscalls.o ./Core/Src/syscalls.su ./Core/Src/sysmem.cyclo ./Core/Src/sysmem.d ./Core/Src/sysmem.o ./Core/Src/sysmem.su ./Core/Src/system_stm32l4xx.cyclo ./Core/Src/system_stm32l4xx.d ./Core/Src/system_stm32l4xx.o ./Core/Src/system_stm32l4xx.su ./Core/Src/ultrasound.cyclo ./Core/Src/ultrasound.d ./Core/Src/ultrasound.o ./Core/Src/ultrasound.su
 
 .PHONY: clean-Core-2f-Src
 

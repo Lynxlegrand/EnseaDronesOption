@@ -25,12 +25,15 @@ Core/Src/mainloop.o: ../Core/Src/mainloop.c ../Core/Inc/ESC.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_i2c_ex.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr_ex.h \
+ ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_spi.h \
+ ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_spi_ex.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h \
  ../Core/Inc/RF.h ../Core/Inc/IMU.h ../Core/Inc/ultrasound.h \
- ../Core/Inc/variable.h ../Core/Inc/PID.h ../Core/Inc/states.h
+ ../Core/Inc/variable.h ../Core/Inc/PID.h ../Core/Inc/states.h \
+ ../Core/Inc/nrf24l01p.h
 ../Core/Inc/ESC.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h:
@@ -59,6 +62,8 @@ Core/Src/mainloop.o: ../Core/Src/mainloop.c ../Core/Inc/ESC.h \
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_i2c_ex.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr_ex.h:
+../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_spi.h:
+../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_spi_ex.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h:
@@ -69,3 +74,4 @@ Core/Src/mainloop.o: ../Core/Src/mainloop.c ../Core/Inc/ESC.h \
 ../Core/Inc/variable.h:
 ../Core/Inc/PID.h:
 ../Core/Inc/states.h:
+../Core/Inc/nrf24l01p.h:

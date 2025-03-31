@@ -77,10 +77,27 @@ CAUTION: these tables applies to the STM32l476rg
 
 | Sensor Pin  | Nucleo Pin | Purpose |
 |-------|-----|---------|
-| VCC | +5V| Alimentation fot the sensor|
+| VCC | +5V| Alimentation for the sensor|
 | GND  | GND| Mass of the sensor  |
 | SDA   |  CN10 pin 18 (male pins)| Data of I2C connection|
 |SCL|D6|Clock of I2C connection|
+
+### Nrf24l01
+
+| Sensor Pin  | Nucleo Pin | Purpose |
+|-------|-----|---------|
+| VCC | +3.3V| Alimentation for the sensor|
+| GND  | GND| Mass of the sensor  |
+| MISO  |  CN7 pin 35 (male pins) | Master In Slave Out|
+|MOSI|CN7 pin 37 (male pins)|Master Out Slave In|
+|SCK|CN10 pin 30 (male pins)|Clock of the sensor|
+|CSN |D9|Chip Select Not|
+|CE|CN10 pin 2 (male pins)|Chip Enable|
+|IRQ|CN10 pin 1 (male pins)|Activates the interrupt at reception|
+
+
+
+
 
 
 

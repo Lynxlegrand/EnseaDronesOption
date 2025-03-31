@@ -15,13 +15,13 @@ float accel_g[3], gyro_dps[3], gyro_angle[3];
 
 HAL_StatusTypeDef IMU_ReadRegister(uint16_t reg, uint8_t *data) {
 	HAL_StatusTypeDef error;
-    error = HAL_I2C_Mem_Read(&hi2c2, IMU_I2C_ADDR, reg, 1, data, 1, HAL_MAX_DELAY);
+    error = HAL_I2C_Mem_Read(&hi2c2, IMU_I2C_ADDR, reg, 1, data, 1, 1000);
     return error;
 }
 
 HAL_StatusTypeDef IMU_ReadRegisters(uint16_t reg, uint8_t *data, uint16_t length) {
 	HAL_StatusTypeDef error;
-    error = HAL_I2C_Mem_Read(&hi2c2, IMU_I2C_ADDR, reg, 1, data, length, HAL_MAX_DELAY);
+    error = HAL_I2C_Mem_Read(&hi2c2, IMU_I2C_ADDR, reg, 1, data, length, 1000);
     return error;
 }
 
@@ -72,7 +72,7 @@ HAL_StatusTypeDef IMU_Init(void) {
     uint8_t who_am_i;
 
 
-    if (HAL_I2C_IsDeviceReady(&hi2c2, IMU_I2C_ADDR, 2, HAL_MAX_DELAY)!= HAL_OK){
+    if (HAL_I2C_IsDeviceReady(&hi2c2, IMU_I2C_ADDR, 2, 1000)!= HAL_OK){
     	return HAL_ERROR;
     }
 

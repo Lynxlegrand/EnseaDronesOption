@@ -8,10 +8,10 @@
 
 void motor_ArmESC(h_motor_t* h_motor) {
     motor_SetPower(h_motor, 0);
-    HAL_Delay(3000);
+    //HAL_Delay(3000);
 
     motor_SetPower(h_motor, 7);
-    HAL_Delay(2000);
+    //HAL_Delay(2000);
 }
 
 int percentageToMicrosecondsAtHighState(int percentage) {

@@ -1,0 +1,16 @@
+
+
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+
+	if(GPIO_Pin == NRF24L01P_IRQ_PIN_NUMBER) {
+#ifdef RECEIVER
+	    nrf24l01p_rx_receive(rx_data);
+	    strcpy(receivedString, rx_data);
+	    flag=1;
+#endif
+	}
+
+}
+
+

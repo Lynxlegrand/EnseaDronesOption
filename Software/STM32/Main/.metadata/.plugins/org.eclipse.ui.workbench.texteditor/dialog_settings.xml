@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="IMU_ReadAccelGyro_Converted_All"/>
+		<item key="selection" value=""/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="key"/>
 			<item value="IMU_ReadAccelGyro_Converted_All"/>
 			<item value="TIM8"/>
 			<item value="tim10"/>
@@ -22,7 +23,6 @@
 			<item value="IMU_Cali"/>
 			<item value="IMU_Calb"/>
 			<item value="IMU_Calbi"/>
-			<item value="IMU_Calib"/>
 		</list>
 		<list key="replacehistory">
 			<item value="htim8"/>

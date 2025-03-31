@@ -5,6 +5,7 @@
 #include "variable.h"
 #include "PID.h"
 #include "states.h"
+#include "nrf24l01p.h"
 
 #include "stm32l4xx.h"
 #include <math.h>
@@ -59,29 +60,51 @@ h_motor_t MOTOR_BACK_LEFT;
 // Flag for security
 int flight_allowed;
 
+// Flag for message reception
+
+int message_flag = 0;
 
 
 // Global variables that store measurements
 float ultrasound_measure_cm = 0;
 extern float accel_g[3], gyro_dps[3], gyro_angle[3];
 
+// flags that indicates the end of a measurement (used only for debugging)
+int ultrasound_measure_flag;
+int gyro_measure_flag;
+
 // Command received via RF
-char received_command[BUFFER_SIZE];
-char validated_command[BUFFER_SIZE];
+
+char received_command[NRF24L01P_PAYLOAD_LENGTH];
+char validated_command[NRF24L01P_PAYLOAD_LENGTH];
+char rx_data[NRF24L01P_PAYLOAD_LENGTH];
 
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
 
 #define MAX(a,b) ((a) > (b)? (a) : (b))
 
+char message[100];
+
 void run(){
 
 	// Initialize RF communication
-	//........
-	//
+	nrf24l01p_rx_init(2500, _250kbps);
+
+	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 
 	state = IDLE_STATE;
 	while(1){
-		if (state == INITIALIZE_STATE){
+		if (ultrasound_measure_flag ==1){
+			memset(message, 0, 100);
+			sprintf(message, "%f \n\r", ultrasound_measure_cm);
+			HAL_UART_Transmit(&huart2,message,100,1000);
+			ultrasound_measure_flag = 0;
+		}
+
+
+		
+
+		if (state == IDLE_STATE){
 			init();
 			state == FLYING_STATE;
 		}
@@ -134,11 +157,11 @@ void run(){
 	}
 }
 
-int is_data_frame_valid(char data_frame[BUFFER_SIZE]){
+int is_data_frame_valid(char data_frame[NRF24L01P_PAYLOAD_LENGTH]){
 	if (data_frame[0] != '$'){
 		return 0;
 	}
-	if (strlen(data_frame)!= BUFFER_SIZE){
+	if (strlen(data_frame)!= NRF24L01P_PAYLOAD_LENGTH){
         return 0;
     }
 
@@ -165,7 +188,7 @@ void RF_callback(){
 				if (strcmp(received_command, "start")==0){
 							state = INITIALIZE_STATE;
 						}
-				else if (received_command[0] == '£'){ 
+				else if (received_command[0] == '*'){
 					state = COEFFICENT_MODIFICATION_STATE;
 					strcpy(validated_command, received_command);
 				}
@@ -176,9 +199,11 @@ void RF_callback(){
 }
 
 void init(){
+	// Starting time reference
+	HAL_TIM_Base_Start(&htim5);
 
 	// Variable initializations
-	flight_allowed = 1;
+	flight_allowed = 1	;
 	sample_time_us = 825;
 
 	heightPID.sample_time = sample_time_us/1000000;
@@ -201,7 +226,12 @@ void init(){
 
 	// IMU initialization
 
-	IMU_Init();
+	if (IMU_Init() == HAL_ERROR){
+		flight_allowed = 0;
+	}
+	else{
+		HAL_TIM_Base_Start_IT(&htim2); // IMU trigger
+	}
 
 
 	// Motors initialization
@@ -240,12 +270,14 @@ void init(){
 
 
 	// Timers start
-
-	HAL_TIM_Base_Start(&htim5); // time reference
 	HAL_TIM_PWM_Start(&htim8, TIM_CHANNEL_1); // ultrasound trigger
 	HAL_TIM_IC_Start_IT(&htim4, TIM_CHANNEL_1); // ultrasound read
-	HAL_TIM_Base_Start_IT(&htim2); // IMU trigger
+
+
 	HAL_TIM_Base_Start_IT(&htim3); // main loop
+
+
+	flight_allowed = 1;
 
 }
 
@@ -281,21 +313,21 @@ void control_step(){
 			//--------- Reading Commands ------------//
 
 			// Height command extraction
-			if (validated_command[1]=="1" && validated_command[2]=="0"){
+			if (validated_command[1]=='1' && validated_command[2]=='0'){
 				height.command+=height_step;
 				height.command = MIN(height.command, 1.5);
 			}
-			else if (validated_command[2]=="1" && validated_command[1]=="0"){
+			else if (validated_command[2]=='1' && validated_command[1]=='0'){
 				height.command-= height_step;
 				height.command = MAX(height.command, 0);
 			}
 
 
 			// Pitch command extraction
-			if (validated_command[3]=="1" && validated_command[4]=="0"){
+			if (validated_command[3]=='1' && validated_command[4]=='0'){
 				pitch.command=1;
 			}
-			else if (validated_command[4]=="1" && validated_command[3]=="0"){
+			else if (validated_command[4]=='1' && validated_command[3]=='0'){
 				pitch.command=-1;
 			}
 
@@ -305,10 +337,10 @@ void control_step(){
 
 
 			// Roll command extraction
-			if (validated_command[5]=="1" && validated_command[6]=="0"){
+			if (validated_command[5]=='1' && validated_command[6]=='0'){
 				roll.command=1;
 			}
-			else if (validated_command[6]=="1" && validated_command[5]=="0"){
+			else if (validated_command[6]=='1' && validated_command[5]=='0'){
 				roll.command=-1;
 			}
 
@@ -317,10 +349,10 @@ void control_step(){
 			}
 
 			// Yaw command extraction
-			if (validated_command[7]=="1" && validated_command[8]=="0"){
+			if (validated_command[7]=='1' && validated_command[8]=='0'){
 				yaw.command+=yaw_step;
 			}
-			else if (validated_command[8]=="1" && validated_command[7]=="0"){
+			else if (validated_command[8]=='1' && validated_command[7]=='0'){
 				yaw.command-= yaw_step;
 			}
 
@@ -366,3 +398,5 @@ void control_step(){
 		}
 
 }
+
+
