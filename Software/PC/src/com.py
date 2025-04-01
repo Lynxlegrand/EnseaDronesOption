@@ -51,7 +51,7 @@ def send_command(command):
     
     while len(command) <BUFF_SIZE-1:
        
-        command += ' '  # Add spaces to fill up to 32 characters
+        command += '\0'  # Add spaces to fill up to 32 characters
 
     encoded_string = (command + '\0').encode('utf-8')
     try:

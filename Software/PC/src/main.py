@@ -125,7 +125,7 @@ class DroneControlPanel(ctk.CTk):
         #Start button
         self.start_button = ctk.CTkButton(self, text = "Start engine",font=("Consolas", 20), fg_color="green", width=260, height=60, corner_radius=50, command= self.toggle_start_button)    
         self.start_button.place(relx = 0.15, rely = 0.5, anchor = "center")
-        self.send_start = None
+        self.send_start = False
         # Start updating buttons
         self.update()
         
@@ -147,9 +147,9 @@ class DroneControlPanel(ctk.CTk):
         if data != None:
             print(data)
         if emergency_stop : 
-            send_command("stop")
+            send_command("$stop")
         if self.send_start : 
-            send_command("start")
+            send_command("$start")
             self.send_start = False
         elif len(pid_values_to_change)!=0:
             n = len(pid_values_to_change)
@@ -206,9 +206,9 @@ class DroneControlPanel(ctk.CTk):
                     entry.insert(0, "Default")  # Remettre "Default"
     
     def toggle_start_button (self) : 
-        if self.send_start == None and self.toggle_button.get() == 1 : 
+        if self.send_start == False : 
             self.send_start = True
-            self.start_button.configure(fg_color="grey", text = "Start signal scent")
+            self.start_button.configure(text = "Start sended")
 
 
         
