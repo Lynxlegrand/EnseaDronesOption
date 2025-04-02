@@ -1,6 +1,6 @@
-../Core/Src/mainloop.c:92:6:run	14
-../Core/Src/mainloop.c:164:5:is_data_frame_valid	3
-../Core/Src/mainloop.c:174:6:RF_callback	8
-../Core/Src/mainloop.c:205:6:init	7
-../Core/Src/mainloop.c:288:6:stop	1
-../Core/Src/mainloop.c:304:6:control_step	21
+../Core/Src/mainloop.c:88:6:run	14
+../Core/Src/mainloop.c:176:5:is_data_frame_valid	2
+../Core/Src/mainloop.c:184:6:command_handler	8
+../Core/Src/mainloop.c:219:19:initialize	11
+../Core/Src/mainloop.c:301:6:stop	1
+../Core/Src/mainloop.c:317:6:control_step	21

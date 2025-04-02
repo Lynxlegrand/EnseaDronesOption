@@ -56,14 +56,14 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-extern SPI_HandleTypeDef hspi2;
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim4;
+extern UART_HandleTypeDef huart2;
 /* USER CODE BEGIN EV */
 extern TIM_HandleTypeDef htim5;
 extern float ultrasound_measure_cm;
-extern int ultrasound_measure_flag;
+
 
 int rising = 0;
 int rising_time = 0;
@@ -213,17 +213,17 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief This function handles EXTI line[9:5] interrupts.
+  * @brief This function handles EXTI line0 interrupt.
   */
-void EXTI9_5_IRQHandler(void)
+void EXTI0_IRQHandler(void)
 {
-  /* USER CODE BEGIN EXTI9_5_IRQn 0 */
+  /* USER CODE BEGIN EXTI0_IRQn 0 */
 
-  /* USER CODE END EXTI9_5_IRQn 0 */
-  HAL_GPIO_EXTI_IRQHandler(SPI2_IRQ_Pin);
-  /* USER CODE BEGIN EXTI9_5_IRQn 1 */
-  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-  /* USER CODE END EXTI9_5_IRQn 1 */
+  /* USER CODE END EXTI0_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
+  /* USER CODE BEGIN EXTI0_IRQn 1 */
+
+  /* USER CODE END EXTI0_IRQn 1 */
 }
 
 /**
@@ -277,7 +277,6 @@ void TIM4_IRQHandler(void)
 		else{
 			ultrasound_measure_cm = (float)pulse_duration/58.31;
 			rising = 0;
-			ultrasound_measure_flag = 1;
 		}
 	 }
 
@@ -290,17 +289,17 @@ void TIM4_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles SPI2 global interrupt.
+  * @brief This function handles USART2 global interrupt.
   */
-void SPI2_IRQHandler(void)
+void USART2_IRQHandler(void)
 {
-  /* USER CODE BEGIN SPI2_IRQn 0 */
+  /* USER CODE BEGIN USART2_IRQn 0 */
 
-  /* USER CODE END SPI2_IRQn 0 */
-  HAL_SPI_IRQHandler(&hspi2);
-  /* USER CODE BEGIN SPI2_IRQn 1 */
+  /* USER CODE END USART2_IRQn 0 */
+  HAL_UART_IRQHandler(&huart2);
+  /* USER CODE BEGIN USART2_IRQn 1 */
 
-  /* USER CODE END SPI2_IRQn 1 */
+  /* USER CODE END USART2_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

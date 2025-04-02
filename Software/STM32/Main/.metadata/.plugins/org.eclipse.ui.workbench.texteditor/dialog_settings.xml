@@ -1,39 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
+	<item key="hasShownOverlayPopupBefore" value="true"/>
+	<item key="replaceBarOpen" value="false"/>
+	<list key="searchhistory">
+		<item value="return"/>
+		<item value="init"/>
+		<item value="void "/>
+		<item value="void init"/>
+		<item value="Transmit"/>
+		<item value="print_log"/>
+		<item value="GPIO_Write"/>
+		<item value="GPIO_Togg"/>
+	</list>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value=""/>
-		<item key="wrap" value="true"/>
-		<item key="casesensitive" value="false"/>
-		<item key="wholeword" value="false"/>
-		<item key="incremental" value="false"/>
-		<item key="isRegEx" value="false"/>
+		<item key="selection" value="  char message[NRF24L01P_PAYLOAD_LENGTH] = {0};"/>
 		<list key="findhistory">
-			<item value="key"/>
-			<item value="IMU_ReadAccelGyro_Converted_All"/>
-			<item value="TIM8"/>
-			<item value="tim10"/>
-			<item value="htim10"/>
-			<item value="htim1"/>
-			<item value="IMU_Calibrate"/>
-			<item value="hi2c1"/>
-			<item value="sample_time"/>
-			<item value="IMU_Read"/>
-			<item value="Convert_IMU_Data_All"/>
-			<item value="IMU_ReadAccel"/>
-			<item value="IMU_Cali"/>
-			<item value="IMU_Calb"/>
-			<item value="IMU_Calbi"/>
+			<item value="  char message[NRF24L01P_PAYLOAD_LENGTH] = {0};"/>
+			<item value=" if (data_received_usb == 1)"/>
 		</list>
-		<list key="replacehistory">
-			<item value="htim8"/>
-			<item value="hi2c2"/>
-		</list>
-	</section>
-	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
-		<item key="DIALOG_X_ORIGIN" value="1149"/>
-		<item key="DIALOG_Y_ORIGIN" value="228"/>
-		<item key="DIALOG_WIDTH" value="414"/>
-		<item key="DIALOG_HEIGHT" value="454"/>
-		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
 	</section>
 </section>

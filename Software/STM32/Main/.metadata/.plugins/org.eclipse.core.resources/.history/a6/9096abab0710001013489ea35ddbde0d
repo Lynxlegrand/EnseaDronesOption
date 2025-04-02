@@ -1,0 +1,421 @@
+#include "stm32l4xx.h"
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "mainloop.h"
+#include "ESC.h"
+#include "RF.h"
+#include "IMU.h"
+#include "ultrasound.h"
+#include "variable.h"
+#include "PID.h"
+#include "states.h"
+#include "nrf24l01p.h"
+
+
+
+
+
+// Peripherals handlers
+extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim2;
+extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim4;
+extern TIM_HandleTypeDef htim5;
+extern TIM_HandleTypeDef htim8;
+extern UART_HandleTypeDef huart2;
+
+
+extern TIM_HandleTypeDef htim15;
+
+
+// State global variable
+int state;
+// Main loop refresh rate
+int sample_time_us;
+
+// Movement limits
+int time_to_reach_1m;
+float height_step;
+int time_to_make_full_rotation;
+float yaw_step;
+
+// Variables storage structure
+control_variables height = {0};
+control_variables pitch = {0};
+control_variables yaw = {0};
+control_variables roll = {0};
+
+
+// PIDs
+PID heightPID = {0};
+PID pitchPID = {0};
+PID rollPID = {0};
+PID yawPID = {0};
+
+// Motors handlers
+h_motor_t MOTOR_FRONT_RIGHT;
+h_motor_t MOTOR_FRONT_LEFT;
+h_motor_t MOTOR_BACK_RIGHT;
+h_motor_t MOTOR_BACK_LEFT;
+
+
+
+// Flag for security
+int flight_allowed;
+
+
+
+
+// Global variables that store measurements
+float ultrasound_measure_cm = 0;
+extern float accel_g[3], gyro_dps[3], gyro_angle[3];
+
+// Command received via RF (and validated before processing)
+char validated_command[NRF24L01P_PAYLOAD_LENGTH];
+
+// For debugging
+char log_message[128] = {0};
+
+#define MIN(a,b) ((a) < (b) ? (a) : (b))
+
+#define MAX(a,b) ((a) > (b)? (a) : (b))
+
+
+
+char message[100];
+void run(){
+	// Initialize RF communication
+	nrf24l01p_rx_init(2500, _250kbps);
+
+	state = IDLE_STATE;
+	while(1){
+		// Message for debugging:
+		if (state == INITIALIZE_STATE){
+
+			sprintf(log_message, "Initialize\n\r");
+			HAL_UART_Transmit(&huart2,log_message,128,1000);
+			memset(log_message, 0, 100);
+
+			if (initialize() == HAL_OK){
+				sprintf(log_message, "Initialization sucessful\n\r");
+				HAL_UART_Transmit(&huart2,log_message,128,1000);
+				memset(log_message, 0, 100);
+				;
+
+				state = FLYING_STATE;
+			}
+			else{
+				sprintf(log_message, "Initialization Failed\n\r");
+				HAL_UART_Transmit(&huart2,log_message,128,1000);
+				memset(log_message, 0, 100);
+
+				state = IDLE_STATE;
+			}
+
+		}
+
+		if (state == STOP_STATE){
+			sprintf(log_message, "Stop\n\r");
+			HAL_UART_Transmit(&huart2,log_message,128,1000);
+			memset(log_message, 0, 100);
+			stop();
+			state = IDLE_STATE;
+
+		}
+
+		if (state == COEFFICENT_MODIFICATION_STATE){
+			PID* modified_pid;
+
+			switch(validated_command[1]){
+				case 'H':
+				    modified_pid = &heightPID;
+                    break;
+				case 'P':
+				    modified_pid = &pitchPID;
+					break;
+				case 'R':
+				    modified_pid = &rollPID;
+					break;
+				case 'Y':
+				    modified_pid = &yawPID;
+					break;
+			}
+
+			char value_string[6];
+			for (int i = 0; i < 6; i++){
+				value_string[i] = validated_command[i+3];
+			}
+			float value = atof(value_string);
+
+
+			switch(validated_command[2]) {
+				case 'P':
+				    modified_pid->kp = value;
+				    break;
+				case 'I':
+				    modified_pid->ki = value;
+					break;
+				case 'D':
+				    modified_pid->kd = value;
+					break;
+			}
+
+
+			sprintf(log_message, "Changed coeff %c of pid %c to %f\n\r", validated_command[2], validated_command[1], value);
+			HAL_UART_Transmit(&huart2,log_message,128,1000);
+			memset(log_message, 0, 100);
+
+			state = IDLE_STATE;
+		}
+
+	}
+}
+
+int is_data_frame_valid(char data_frame[NRF24L01P_PAYLOAD_LENGTH]){
+	if ((data_frame[0] == '$')|(data_frame[0] == '*')){
+		return 1;
+	}
+
+	return 0;
+}
+
+void command_handler(char received_command[NRF24L01P_PAYLOAD_LENGTH]){
+
+	// received_command stores the message sent by the PC
+	if (is_data_frame_valid(received_command)==0){
+		return;
+	}
+
+	switch(state){
+			case FLYING_STATE:
+				if ((received_command[1]=='0' )|(received_command[1]=='1')){
+						strcpy(validated_command, received_command);
+
+						sprintf(log_message, "Received movement command : %s\n\r", validated_command);
+						HAL_UART_Transmit(&huart2,log_message,128,1000);
+						memset(log_message, 0, 100);
+					}
+				else if (strcmp(received_command, "$stop")==0){
+					state = STOP_STATE;
+				}
+				break;
+
+			case IDLE_STATE:
+				if (strcmp(received_command, "$start")==0){
+							state = INITIALIZE_STATE;
+						}
+				else if (received_command[0] == '*'){
+					state = COEFFICENT_MODIFICATION_STATE;
+					strcpy(validated_command, received_command);
+				}
+				break;
+
+			}
+
+}
+
+HAL_StatusTypeDef initialize(void){
+	// Starting time reference
+	if (HAL_TIM_Base_Start(&htim5)==HAL_ERROR){
+		return HAL_ERROR;
+	}
+
+	// Variable initializations
+	flight_allowed = 1	;
+	sample_time_us = 825;
+
+	heightPID.sample_time = sample_time_us/1000000;
+	pitchPID.sample_time = sample_time_us/1000000;
+	rollPID.sample_time = sample_time_us/1000000;
+	yawPID.sample_time = sample_time_us/1000000;
+
+
+	time_to_reach_1m = 5; // seconds
+	time_to_make_full_rotation = 5; // seconds
+
+	height_step = sample_time_us/time_to_reach_1m;
+	yaw_step = 360*sample_time_us/time_to_make_full_rotation;
+
+
+	// Initialization of the mainloop timer
+	htim3.Instance->PSC = 80-1;// Timer clock is 80 MHz
+	htim3.Instance->CNT = sample_time_us;
+
+
+	// IMU initialization
+
+	if (IMU_Init() == HAL_ERROR){
+		return HAL_ERROR;
+	}
+
+	if (HAL_TIM_Base_Start_IT(&htim2)==HAL_ERROR){
+		return HAL_ERROR; // IMU trigger
+	}
+
+
+	// Motors initialization
+	MOTOR_FRONT_RIGHT.htim = &htim1;
+    MOTOR_FRONT_RIGHT.channel = TIM_CHANNEL_1;
+    if (motor_Init(&MOTOR_FRONT_RIGHT)== HAL_ERROR){
+    	return HAL_ERROR;
+    }
+
+
+	MOTOR_FRONT_LEFT.htim = &htim1;
+    MOTOR_FRONT_LEFT.channel = TIM_CHANNEL_2;
+    if (motor_Init(&MOTOR_FRONT_LEFT)== HAL_ERROR){
+    	return HAL_ERROR;
+    }
+	MOTOR_BACK_RIGHT.htim = &htim1;
+	MOTOR_BACK_RIGHT.channel = TIM_CHANNEL_3;
+	if (motor_Init(&MOTOR_BACK_RIGHT)== HAL_ERROR){
+		return HAL_ERROR;
+	}
+
+	MOTOR_BACK_LEFT.htim = &htim1;
+	MOTOR_BACK_LEFT.channel = TIM_CHANNEL_4;
+	if (motor_Init(&MOTOR_BACK_LEFT)== HAL_ERROR){
+		return HAL_ERROR;
+	}
+
+	// Timers start
+	if (HAL_TIM_PWM_Start(&htim8, TIM_CHANNEL_1)==HAL_ERROR){
+		return HAL_ERROR;; // ultrasound trigger
+	}
+	if (HAL_TIM_IC_Start_IT(&htim4, TIM_CHANNEL_1)==HAL_ERROR){
+		return HAL_ERROR; // ultrasound read
+	}
+
+
+	if (HAL_TIM_Base_Start_IT(&htim3)== HAL_ERROR){
+		return HAL_ERROR;; // main loop
+	}
+
+	flight_allowed = 1;
+	return HAL_OK;
+
+}
+
+void stop(){
+	flight_allowed = 0;
+
+	HAL_TIM_Base_Stop(&htim5); // time reference
+	HAL_TIM_PWM_Stop(&htim8, TIM_CHANNEL_1); // ultrasound trigger
+	HAL_TIM_IC_Stop_IT(&htim4, TIM_CHANNEL_1); // ultrasound read
+	HAL_TIM_Base_Stop_IT(&htim2); // IMU trigger
+	HAL_TIM_Base_Stop_IT(&htim3); // main loop
+
+	motor_SetPower(&MOTOR_FRONT_RIGHT, 0);
+	motor_SetPower(&MOTOR_FRONT_LEFT, 0);
+	motor_SetPower(&MOTOR_BACK_RIGHT, 0);
+	motor_SetPower(&MOTOR_BACK_LEFT, 0);
+}
+
+
+void control_step(){
+
+
+		//--------- Reading Sensors ------------//
+
+		roll.measurement = gyro_angle[0];
+		pitch.measurement = gyro_angle[1];
+		yaw.measurement = gyro_angle[2];
+
+
+
+		height.measurement = ultrasound_measure_cm/100;
+
+		//--------- Reading Commands ------------//
+
+		// Height command extraction
+		if (validated_command[1]=='1' && validated_command[2]=='0'){
+			height.command+=height_step;
+			height.command = MIN(height.command, 1.5);
+		}
+		else if (validated_command[2]=='1' && validated_command[1]=='0'){
+			height.command-= height_step;
+			height.command = MAX(height.command, 0);
+		}
+
+
+		// Pitch command extraction
+		if (validated_command[3]=='1' && validated_command[4]=='0'){
+			pitch.command=1;
+		}
+		else if (validated_command[4]=='1' && validated_command[3]=='0'){
+			pitch.command=-1;
+		}
+
+		else{
+			pitch.command=0;
+		}
+
+
+		// Roll command extraction
+		if (validated_command[5]=='1' && validated_command[6]=='0'){
+			roll.command=1;
+		}
+		else if (validated_command[6]=='1' && validated_command[5]=='0'){
+			roll.command=-1;
+		}
+
+		else{
+			roll.command=0;
+		}
+
+		// Yaw command extraction
+		if (validated_command[7]=='1' && validated_command[8]=='0'){
+			yaw.command+=yaw_step;
+		}
+		else if (validated_command[8]=='1' && validated_command[7]=='0'){
+			yaw.command-= yaw_step;
+		}
+
+		if (strcmp(validated_command, "$11111111")==0){
+			flight_allowed = 0;
+		}
+
+		//--------- Processing data ------------//
+		// Calculating control inputs
+
+		height.error = height.measurement - height.command;
+		pitch.error = pitch.measurement - pitch.command;
+		yaw.error = yaw.measurement - yaw.command;
+		roll.error = roll.measurement - roll.command;
+
+		// Calculating control outputs
+
+		height.u = update(heightPID,height.error);
+		pitch.u = update(pitchPID, pitch.error);
+		yaw.u = update(yawPID, yaw.error);
+		roll.u = update(rollPID,roll.error);
+
+		//--------- Changing motors behaviour ------------//
+
+		// motor mixing algorithm
+		int FR_percentage = fmin(100, fmax(0, height.u+yaw.u+pitch.u+roll.u));
+		int FL_percentage = fmin(100, fmax(0, height.u-yaw.u+pitch.u-roll.u));
+		int BR_percentage = fmin(100, fmax(0, height.u-yaw.u-pitch.u+roll.u));
+		int BL_percentage = fmin(100, fmax(0, height.u+yaw.u-pitch.u-roll.u));
+
+
+		if (flight_allowed==1){
+			motor_SetPower(&MOTOR_FRONT_RIGHT, FR_percentage);
+			motor_SetPower(&MOTOR_FRONT_LEFT, FL_percentage);
+			motor_SetPower(&MOTOR_BACK_RIGHT, BR_percentage);
+			motor_SetPower(&MOTOR_BACK_LEFT, BL_percentage);
+		}
+
+		else{
+			motor_SetPower(&MOTOR_FRONT_RIGHT, 0);
+			motor_SetPower(&MOTOR_FRONT_LEFT, 0);
+			motor_SetPower(&MOTOR_BACK_RIGHT, 0);
+			motor_SetPower(&MOTOR_BACK_LEFT, 0);
+		}
+
+}
+
+

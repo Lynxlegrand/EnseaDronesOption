@@ -1,6 +1,6 @@
-../Core/Src/mainloop.c:92:6:run	56	static
-../Core/Src/mainloop.c:164:5:is_data_frame_valid	16	static
-../Core/Src/mainloop.c:174:6:RF_callback	8	static
-../Core/Src/mainloop.c:205:6:init	8	static
-../Core/Src/mainloop.c:288:6:stop	8	static
-../Core/Src/mainloop.c:304:6:control_step	40	static
+../Core/Src/mainloop.c:88:6:run	48	static
+../Core/Src/mainloop.c:176:5:is_data_frame_valid	16	static
+../Core/Src/mainloop.c:184:6:command_handler	16	static
+../Core/Src/mainloop.c:219:19:initialize	8	static
+../Core/Src/mainloop.c:301:6:stop	8	static
+../Core/Src/mainloop.c:317:6:control_step	40	static

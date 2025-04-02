@@ -1,0 +1,17 @@
+21:45:32 **** Incremental Build of configuration Debug for project Software_V3_Emitter ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "Software_V3_Emitter.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\maela\Desktop\STM32\Software_V3_Emitter\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Software_V3_Emitter.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Software_V3_Emitter.elf
+ 
+arm-none-eabi-size  Software_V3_Emitter.elf 
+arm-none-eabi-objdump -h -S Software_V3_Emitter.elf  > "Software_V3_Emitter.list"
+   text	   data	    bss	    dec	    hex	filename
+  45088	    468	   2164	  47720	   ba68	Software_V3_Emitter.elf
+Finished building: default.size.stdout
+ 
+Finished building: Software_V3_Emitter.list
+ 
+
+21:45:34 Build Finished. 0 errors, 0 warnings. (took 1s.970ms)
+

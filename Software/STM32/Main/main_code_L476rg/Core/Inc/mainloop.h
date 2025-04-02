@@ -1,7 +1,11 @@
-void init();
+
 void control_step();
 
 void stop();
 void run();
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
+void command_handler(char received_command[]);
+
+HAL_StatusTypeDef initialize(void);
+
+

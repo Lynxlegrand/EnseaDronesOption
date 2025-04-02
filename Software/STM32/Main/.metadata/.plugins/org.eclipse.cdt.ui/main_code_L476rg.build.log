@@ -1,21 +1,10 @@
-22:44:17 **** Incremental Build of configuration Debug for project main_code_L476rg ****
+23:17:22 **** Incremental Build of configuration Debug for project main_code_L476rg ****
 make -j8 all 
-arm-none-eabi-gcc "../Core/Src/stm32l4xx_it.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32L476xx -c -I../Core/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc -I../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32L4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32l4xx_it.d" -MT"Core/Src/stm32l4xx_it.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/stm32l4xx_it.o"
-../Core/Src/stm32l4xx_it.c: In function 'TIM2_IRQHandler':
-../Core/Src/stm32l4xx_it.c:239:3: warning: implicit declaration of function 'IMU_ReadAccelGyro_Converted_All' [-Wimplicit-function-declaration]
-  239 |   IMU_ReadAccelGyro_Converted_All((float)IMU_PERIOD_MS/(float)1000);
-      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-arm-none-eabi-gcc -o "main_code_L476rg.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Cloud\EnseaDronesOption\Software\STM32\Main\main_code_L476rg\STM32L476RGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="main_code_L476rg.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
-Finished building target: main_code_L476rg.elf
- 
 arm-none-eabi-size  main_code_L476rg.elf 
-arm-none-eabi-objdump -h -S main_code_L476rg.elf  > "main_code_L476rg.list"
    text	   data	    bss	    dec	    hex	filename
-  59720	    472	   3160	  63352	   f778	main_code_L476rg.elf
+  61656	    472	   3168	  65296	   ff10	main_code_L476rg.elf
 Finished building: default.size.stdout
  
-Finished building: main_code_L476rg.list
- 
 
-22:44:19 Build Finished. 0 errors, 1 warnings. (took 2s.356ms)
+23:17:23 Build Finished. 0 errors, 0 warnings. (took 528ms)
 

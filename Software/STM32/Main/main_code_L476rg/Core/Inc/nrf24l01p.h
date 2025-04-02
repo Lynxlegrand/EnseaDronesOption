@@ -20,10 +20,10 @@ extern UART_HandleTypeDef huart2;
 #define NRF24L01P_CE_PIN_PORT             GPIOC
 #define NRF24L01P_CE_PIN_NUMBER           GPIO_PIN_8
 
-#define NRF24L01P_IRQ_PIN_PORT            GPIOC
-#define NRF24L01P_IRQ_PIN_NUMBER          GPIO_PIN_9
+#define NRF24L01P_IRQ_PIN_PORT            GPIOA
+#define NRF24L01P_IRQ_PIN_NUMBER          GPIO_PIN_0
 
-#define NRF24L01P_PAYLOAD_LENGTH          16     // 1 - 32bytes
+#define NRF24L01P_PAYLOAD_LENGTH          16    // 1 - 32bytes
 
 
 /* nRF24L01+ typedefs */
